@@ -97,7 +97,7 @@ export default function Hero() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/me1.jpg"
+              src="/me.jpg"
               alt="Lukwago Joel"
               className="w-full h-full object-cover grayscale contrast-125"
             />
