@@ -76,16 +76,20 @@ const Bio = () => {
           and real estate — driven by both business impact and architectural
           beauty. I&apos;m dedicated to creating value through innovative and
           impactful ventures.
+
+           Above all, I&apos;m a devoted Christian and lover of God,
+                guided by faith in both my personal life and professional
+                journey.
         </p>
 
-        {!isExpanded && (
+        {/* {!isExpanded && (
           <button
             onClick={() => setIsExpanded(true)}
             className="font-mono text-xs uppercase tracking-wide text-chrome hover:text-bone transition-colors focus-ring"
           >
             + Read the rest
           </button>
-        )}
+        )} */}
 
         <AnimatePresence>
           {isExpanded && (

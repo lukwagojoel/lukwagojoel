@@ -34,8 +34,8 @@ const Footer = () => {
   }, [lastScrollY]);
 
   const socialLinks = [
-    { icon: <Mail size={18} />, href: "mailto:jjt200220@gmail.com", label: "Email" },
-    { icon: <FaGithub size={18} />, href: "https://github.com/Lukwago-Joel-Jr", label: "GitHub" },
+    { icon: <Mail size={18} />, href: "mailto:me@lukwagojoel.com", label: "Email" },
+    { icon: <FaGithub size={18} />, href: "https://github.com/lukwagojoel", label: "GitHub" },
     { icon: <Phone size={18} />, href: "tel:+256706754002", label: "Phone" },
     { icon: <FaWhatsapp size={18} />, href: "https://wa.me/256706754002", label: "WhatsApp" },
   ];
