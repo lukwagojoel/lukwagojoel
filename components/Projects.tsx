@@ -18,12 +18,14 @@ type ProjectFromAPI = {
   projectType?: "personal" | "client";
 };
 
-const filters = ["personal", "client", "all"] as const;
+// Reordered filters so "client" appears first
+const filters = ["client", "personal", "all"] as const;
 
 export default function Projects() {
   const [projects, setProjects] = useState<ProjectFromAPI[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState<"all" | "personal" | "client">("personal");
+  // Default filter set to "client"
+  const [filter, setFilter] = useState<"all" | "personal" | "client">("client");
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   // cursor-following preview position
@@ -45,6 +47,10 @@ export default function Projects() {
         const publicProjects = (data as any[])
           .filter((p) => (p.visibility ?? "public") === "public")
           .sort((a, b) => {
+            // Priority sort: Client projects first, then personal projects
+            if (a.projectType !== b.projectType) {
+              return a.projectType === "client" ? -1 : 1;
+            }
             const ao = typeof a.order === "number" ? a.order : Number.POSITIVE_INFINITY;
             const bo = typeof b.order === "number" ? b.order : Number.POSITIVE_INFINITY;
             return ao - bo;

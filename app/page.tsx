@@ -1,5 +1,4 @@
 import Hero from "@/components/Hero";
-import IdentityBar from "@/components/IdentityBar";
 import Bio from "@/components/Bio";
 import Projects from "@/components/Projects";
 import Footer from "@/components/Footer";

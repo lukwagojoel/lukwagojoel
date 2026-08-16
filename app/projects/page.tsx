@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { technicalAssets } from "@/components/assets";
-import { LucideDelete, LucideEye, LucidePencil } from "lucide-react";
+import {
+  Trash2, Pencil, ExternalLink, Plus, X, ChevronUp, ChevronDown,
+  Eye, EyeOff, Briefcase, User, Globe, Lock, ArrowLeft, Check,
+  Image as ImageIcon, Link as LinkIcon, AlignLeft, Layers, Hash,
+} from "lucide-react";
 
 type ProjectFromAPI = {
   id?: string;
@@ -16,18 +20,85 @@ type ProjectFromAPI = {
   order?: number;
 };
 
+const TECH_LABELS: Record<string, string> = {
+  javascript: "JavaScript", typescript: "TypeScript", react: "React",
+  reactNative: "React Native", node: "Node.js", next: "Next.js",
+  python: "Python", mongodb: "MongoDB", firebase: "Firebase", supabase: "Supabase",
+};
+
+type View = "list" | "form";
+type Filter = "all" | "personal" | "client";
+
+// ── Reusable field wrapper ──────────────────────────────────────────────────
+function Field({ label, icon: Icon, error, children }: {
+  label: string; icon: any; error?: string; children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-1.5">
+        <Icon className="w-3.5 h-3.5 text-[#8e8e93]" strokeWidth={1.75} />
+        <label className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8e8e93]">{label}</label>
+      </div>
+      {children}
+      {error && <p className="mt-1 text-[12px] text-[#ff3b30]">{error}</p>}
+    </div>
+  );
+}
+
+// ── iOS-style text input ────────────────────────────────────────────────────
+function IosInput({ value, onChange, placeholder, type = "text" }: {
+  value: string; onChange: (v: string) => void; placeholder?: string; type?: string;
+}) {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="w-full bg-[#f2f2f7] rounded-xl px-4 py-3 text-[15px] text-[#1c1c1e] placeholder:text-[#c7c7cc] outline-none focus:ring-2 focus:ring-[#007aff]/40 transition-all"
+    />
+  );
+}
+
+// ── Segmented control ───────────────────────────────────────────────────────
+function SegmentedControl<T extends string>({ options, value, onChange }: {
+  options: { label: string; value: T }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="flex bg-[#e5e5ea] rounded-xl p-1 gap-1">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={`flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+            value === o.value
+              ? "bg-white text-[#1c1c1e] shadow-sm"
+              : "text-[#8e8e93]"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function ProjectsAdmin() {
   const [projects, setProjects] = useState<ProjectFromAPI[]>([]);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<Partial<ProjectFromAPI>>({});
+  const [view, setView] = useState<View>("list");
+  const [form, setForm] = useState<Partial<ProjectFromAPI>>({
+    visibility: "public", projectType: "personal", stack: [],
+  });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showForm, setShowForm] = useState(false);
-  const [filter, setFilter] = useState<"all" | "personal" | "client">("all");
+  const [filter, setFilter] = useState<Filter>("all");
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  useEffect(() => { fetchProjects(); }, []);
 
   async function fetchProjects() {
     setLoading(true);
@@ -35,275 +106,432 @@ export default function ProjectsAdmin() {
       const res = await fetch("/api/projects");
       const data = await res.json();
       setProjects(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err); }
+    finally { setLoading(false); }
+  }
+
+  function validate(values: Partial<ProjectFromAPI>) {
+    const e: Record<string, string> = {};
+    if (!values.name?.trim()) e.name = "Project name is required";
+    if (!values.description?.trim()) e.description = "Description is required";
+    if (!values.image || !/^https?:\/\//i.test(values.image)) e.image = "Must be a valid image URL (https://...)";
+
+    return e;
   }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const validation = validateForm(form);
-    if (Object.keys(validation).length > 0) {
-      setErrors(validation);
-      return;
-    }
-    const payload: any = {
-      name: form.name || "",
-      description: form.description || "",
-      link: form.link || "",
-      image: form.image || "",
-      visibility: form.visibility || "public",
-      projectType: form.projectType || "personal",
-      order: typeof form.order === "number" ? form.order : (form.order ? Number(form.order) : undefined),
-      // accept comma separated stack or array
-      stack: Array.isArray(form.stack)
-        ? form.stack
-        : typeof form.stack === "string"
-        ? (form.stack as string).split(",").map((s) => s.trim()).filter(Boolean)
-        : form.stack || [],
+    const errs = validate(form);
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setSaving(true);
+    const payload = {
+      name: form.name ?? "",
+      description: form.description ?? "",
+      link: form.link ?? "",
+      image: form.image ?? "",
+      visibility: form.visibility ?? "public",
+      projectType: form.projectType ?? "personal",
+      order: form.order ? Number(form.order) : undefined,
+      stack: Array.isArray(form.stack) ? form.stack : [],
     };
-
     try {
       if (editingId) {
         await fetch(`/api/projects?id=${editingId}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
+          method: "PUT", body: JSON.stringify(payload),
           headers: { "Content-Type": "application/json" },
         });
       } else {
-        await fetch(`/api/projects`, {
-          method: "POST",
-          body: JSON.stringify(payload),
+        await fetch("/api/projects", {
+          method: "POST", body: JSON.stringify(payload),
           headers: { "Content-Type": "application/json" },
         });
       }
-      setForm({});
-      setEditingId(null);
-      setErrors({});
+      resetForm();
       fetchProjects();
-    } catch (err) {
-      console.error(err);
-    }
+      setView("list");
+    } catch (err) { console.error(err); }
+    finally { setSaving(false); }
   }
 
-  function validateForm(values: Partial<ProjectFromAPI>) {
-    const e: Record<string, string> = {};
-    if (!values.name || !values.name.trim()) e.name = "Project name is required";
-    if (!values.description || !values.description.trim()) e.description = "Description is required";
-    // image should be a URL
-    if (!values.image || !/^https?:\/\//i.test(values.image)) e.image = "Image URL is required and must start with http:// or https://";
-    const stackArray = Array.isArray(values.stack) ? values.stack : (typeof values.stack === 'string' ? values.stack.split(',').map(s=>s.trim()).filter(Boolean) : []);
-    if (!stackArray || stackArray.length === 0) e.stack = "Select at least one tech";
-    if (values.visibility && values.visibility !== "public" && values.visibility !== "private") e.visibility = "Invalid visibility";
-    if (values.order && isNaN(Number(values.order))) e.order = "Order must be a number";
-    return e;
+  function resetForm() {
+    setForm({ visibility: "public", projectType: "personal", stack: [] });
+    setEditingId(null);
+    setErrors({});
   }
 
-  
+  function startEdit(p: ProjectFromAPI) {
+    setEditingId(p.id ?? null);
+    setForm({
+      name: p.name, description: p.description, link: p.link, image: p.image,
+      stack: Array.isArray(p.stack) ? p.stack : typeof p.stack === "string"
+        ? (p.stack as string).split(",").map((s) => s.trim()).filter(Boolean) : [],
+      visibility: p.visibility ?? "public",
+      projectType: p.projectType ?? "personal",
+      order: p.order,
+    });
+    setErrors({});
+    setView("form");
+  }
 
   async function removeProject(id?: string) {
-    if (!id) return;
-    if (!confirm("Delete this project?")) return;
+    if (!id || !confirm("Delete this project?")) return;
     await fetch(`/api/projects?id=${id}`, { method: "DELETE" });
     fetchProjects();
   }
 
-  async function updateProjectOrder(id: string | undefined, newOrder: number) {
+  async function updateOrder(id: string | undefined, newOrder: number) {
     if (!id) return;
-    // optimistic update
-    setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, order: newOrder } : p)));
+    setProjects((prev) => prev.map((p) => p.id === id ? { ...p, order: newOrder } : p));
     try {
       await fetch(`/api/projects?id=${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order: newOrder }),
       });
       fetchProjects();
-    } catch (err) {
-      console.error(err);
-      fetchProjects();
-    }
+    } catch (err) { console.error(err); fetchProjects(); }
   }
 
-  function startEdit(p: ProjectFromAPI) {
-    setEditingId(p.id || null);
-    setForm({
-      name: p.name,
-      description: p.description,
-      link: p.link,
-      image: p.image,
-      stack: Array.isArray(p.stack) ? p.stack : (typeof p.stack === 'string' ? (p.stack as string).split(',').map(s=>s.trim()).filter(Boolean) : []),
-      visibility: p.visibility || "public",
-      projectType: p.projectType || "personal",
-      order: typeof p.order === "number" ? p.order : (p.order ? Number(p.order) : undefined),
-    });
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function toggleStack(key: string) {
+    const prev = Array.isArray(form.stack) ? [...(form.stack as string[])] : [];
+    const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
+    setForm((f) => ({ ...f, stack: next }));
+    if (errors.stack) setErrors((e) => { const c = { ...e }; delete c.stack; return c; });
   }
 
-  const displayMap: Record<string, string> = {
-    javascript: "JavaScript",
-    typescript: "TypeScript",
-    react: "React",
-    reactNative: "React Native",
-    node: "Node.js",
-    next: "Next.js",
-    python: "Python",
-    mongodb: "MongoDB",
-    firebase: "Firebase",
-    supabase: "Supabase",
-  };
+  const filtered = projects.filter((p) => filter === "all" || p.projectType === filter);
 
-  function stackDisplay(stack: any) {
-    if (!stack) return null;
-    const list = Array.isArray(stack) ? stack : [];
+  // ── FORM VIEW ──────────────────────────────────────────────────────────────
+  if (view === "form") {
     return (
-      <div className="flex flex-wrap gap-2">
-        {list.map((s: any, i: number) => {
-          // s may be a key (e.g. 'react') or an object/string
-          const keyCandidate = typeof s === "string" ? s : s?.name;
-          const logo = (technicalAssets as any)[keyCandidate] || null;
-          const label = displayMap[keyCandidate] ?? (typeof s === "string" ? s : s?.name);
-          // fallback: try formatting label to find logo
-          let finalLogo = logo;
-          if (!finalLogo && typeof label === "string") {
-            const computed = label.toLowerCase().replace(/\s+/g, "");
-            finalLogo = (technicalAssets as any)[computed] || null;
-          }
-          return (
-            <div key={i} className="flex items-center gap-2 px-2 py-1  bg-gray-100 dark:bg-black text-sm">
-              {finalLogo ? <img src={finalLogo} alt={label} className="w-4 h-4 object-contain" /> : null}
-              <span className="text-gray-800 dark:text-gray-200">{label}</span>
+      <div className="min-h-screen bg-[#f2f2f7]">
+        {/* Navigation bar */}
+        <div className="bg-[#f2f2f7]/80 backdrop-blur-xl border-b border-[#e5e5ea] sticky top-0 z-30">
+          <div className="max-w-lg mx-auto px-4 flex items-center justify-between h-14">
+            <button
+              type="button"
+              onClick={() => { resetForm(); setView("list"); }}
+              className="flex items-center gap-1 text-[#007aff] text-[15px] font-medium"
+            >
+              <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
+              Projects
+            </button>
+            <span className="text-[17px] font-semibold text-[#1c1c1e]">
+              {editingId ? "Edit Project" : "New Project"}
+            </span>
+            <button
+              type="button"
+              onClick={submit as any}
+              disabled={saving}
+              className="text-[#007aff] text-[15px] font-semibold disabled:opacity-40"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={submit} className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-20">
+
+          {/* Basic info group */}
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-[#e5e5ea]">
+            <div className="p-4">
+              <Field label="Project name" icon={Hash} error={errors.name}>
+                <IosInput
+                  value={form.name ?? ""}
+                  onChange={(v) => { setForm((f) => ({ ...f, name: v })); if (errors.name) setErrors((e) => { const c = { ...e }; delete c.name; return c; }); }}
+                  placeholder="e.g. Meridian Shop"
+                />
+              </Field>
             </div>
-          );
-        })}
+            <div className="p-4">
+              <Field label="Description" icon={AlignLeft} error={errors.description}>
+                <textarea
+                  value={form.description ?? ""}
+                  onChange={(e) => { setForm((f) => ({ ...f, description: e.target.value })); if (errors.description) setErrors((er) => { const c = { ...er }; delete c.description; return c; }); }}
+                  placeholder="A short summary of what this project does and the problem it solves…"
+                  rows={4}
+                  className="w-full bg-[#f2f2f7] rounded-xl px-4 py-3 text-[15px] text-[#1c1c1e] placeholder:text-[#c7c7cc] outline-none focus:ring-2 focus:ring-[#007aff]/40 resize-none transition-all"
+                />
+              </Field>
+            </div>
+            <div className="p-4">
+              <Field label="Live URL" icon={LinkIcon}>
+                <IosInput
+                  value={form.link ?? ""}
+                  onChange={(v) => setForm((f) => ({ ...f, link: v }))}
+                  placeholder="https://yourproject.com"
+                  type="url"
+                />
+              </Field>
+            </div>
+            <div className="p-4">
+              <Field label="Cover image URL" icon={ImageIcon} error={errors.image}>
+                <IosInput
+                  value={form.image ?? ""}
+                  onChange={(v) => { setForm((f) => ({ ...f, image: v })); if (errors.image) setErrors((e) => { const c = { ...e }; delete c.image; return c; }); }}
+                  placeholder="https://picsum.photos/seed/myproject/800/600"
+                  type="url"
+                />
+                {form.image && /^https?:\/\//.test(form.image) && (
+                  <div className="mt-2 rounded-xl overflow-hidden aspect-video bg-[#f2f2f7]">
+                    <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </Field>
+            </div>
+          </div>
+
+          {/* Type + visibility */}
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-[#e5e5ea]">
+            <div className="p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8e8e93] mb-2.5">Project type</p>
+              <SegmentedControl
+                options={[{ label: "Personal", value: "personal" }, { label: "Client work", value: "client" }]}
+                value={(form.projectType as any) ?? "personal"}
+                onChange={(v) => setForm((f) => ({ ...f, projectType: v }))}
+              />
+            </div>
+            <div className="p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8e8e93] mb-2.5">Visibility</p>
+              <SegmentedControl
+                options={[{ label: "Public", value: "public" }, { label: "Private", value: "private" }]}
+                value={(form.visibility as any) ?? "public"}
+                onChange={(v) => setForm((f) => ({ ...f, visibility: v }))}
+              />
+              <p className="mt-2 text-[12px] text-[#8e8e93]">
+                {form.visibility === "private" ? "Only visible to you." : "Shown on your public portfolio."}
+              </p>
+            </div>
+            <div className="p-4">
+              <Field label="Display order" icon={Hash}>
+                <IosInput
+                  value={form.order !== undefined ? String(form.order) : ""}
+                  onChange={(v) => setForm((f) => ({ ...f, order: v ? Number(v) : undefined }))}
+                  placeholder="0 — lower numbers appear first"
+                  type="number"
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* Tech stack */}
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Layers className="w-3.5 h-3.5 text-[#8e8e93]" strokeWidth={1.75} />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8e8e93]">Tech stack</p>
+              </div>
+              {Array.isArray(form.stack) && form.stack.length > 0 && (
+                <span className="text-[12px] text-[#007aff] font-medium">{(form.stack as string[]).length} selected</span>
+              )}
+            </div>
+            {errors.stack && <p className="text-[12px] text-[#ff3b30] mb-3">{errors.stack}</p>}
+            <div className="grid grid-cols-2 gap-2">
+              {Object.keys(technicalAssets).map((key) => {
+                const label = TECH_LABELS[key] ?? (key.charAt(0).toUpperCase() + key.slice(1));
+                const logo = (technicalAssets as any)[key];
+                const selected = Array.isArray(form.stack) && (form.stack as string[]).includes(key);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => toggleStack(key)}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border transition-all text-left ${
+                      selected
+                        ? "bg-[#007aff]/10 border-[#007aff] text-[#007aff]"
+                        : "bg-[#f2f2f7] border-transparent text-[#1c1c1e]"
+                    }`}
+                  >
+                    {logo && <img src={logo} alt={label} className="w-5 h-5 object-contain flex-shrink-0" />}
+                    <span className="text-[13px] font-medium flex-1">{label}</span>
+                    {selected && <Check className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={2.5} />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Save button (bottom) */}
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full bg-[#007aff] text-white font-semibold text-[15px] py-4 rounded-2xl disabled:opacity-50 transition-opacity"
+          >
+            {saving ? "Saving…" : editingId ? "Save changes" : "Add project"}
+          </button>
+
+          {editingId && (
+            <button
+              type="button"
+              onClick={() => { resetForm(); setView("list"); }}
+              className="w-full text-[#ff3b30] font-semibold text-[15px] py-4 rounded-2xl bg-[#ff3b30]/10 transition-opacity"
+            >
+              Cancel
+            </button>
+          )}
+        </form>
       </div>
     );
   }
 
+  // ── LIST VIEW ──────────────────────────────────────────────────────────────
   return (
-    <div className="w-full flex justify-center items-start p-6 pt-28 pb-28 bg-white dark:bg-black text-gray-900 dark:text-white">
-      <div className="w-full max-w-3xl">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Manage Projects</h1>
-          <div className="flex items-center gap-2">
-            <button onClick={() => { setShowForm(s => !s); if (editingId) setShowForm(true); }} className="px-3 py-1 bg-purple-600 text-white ">{showForm ? 'Hide' : 'Add New Project'}</button>
-          </div>
+    <div className="min-h-screen bg-[#f2f2f7]">
+      {/* Navigation bar */}
+      <div className="bg-[#f2f2f7]/80 backdrop-blur-xl border-b border-[#e5e5ea] sticky top-0 z-30">
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-between h-14">
+          <span className="text-[17px] font-semibold text-[#1c1c1e]">Projects</span>
+          <button
+            onClick={() => { resetForm(); setView("form"); }}
+            className="flex items-center gap-1.5 bg-[#007aff] text-white text-[13px] font-semibold px-3 py-1.5 rounded-full"
+          >
+            <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
+            Add
+          </button>
         </div>
+      </div>
 
-        {(showForm || editingId) && (
-          <form onSubmit={submit} className="mb-6 space-y-3 p-4 border  bg-white dark:bg-black">
-            <div className="grid grid-cols-1 gap-2">
-            <input value={form.name || ""} onChange={(e) => { setForm({ ...form, name: e.target.value }); setErrors(prev=>{ const c={...prev}; delete c.name; return c; }); }} placeholder="Project name" className="p-2 border " />
-            {errors.name ? <div className="text-red-600 text-sm">{errors.name}</div> : null}
-            <input value={form.link || ""} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="Project link" className="p-2 border " />
-            <input value={form.image || ""} onChange={(e) => { setForm({ ...form, image: e.target.value }); setErrors(prev=>{ const c={...prev}; delete c.image; return c; }); }} placeholder="Image URL (http(s)://...)" className="p-2 border " />
-            {errors.image ? <div className="text-red-600 text-sm">{errors.image}</div> : null}
-
-            <div className="flex gap-2 items-center">
-              <label className="text-sm">Visibility:</label>
-              <select value={(form.visibility as string) || "public"} onChange={(e) => setForm({ ...form, visibility: e.target.value as "public" | "private" })} className="p-2 border ">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-              </select>
-
-              <label className="text-sm">Type:</label>
-              <select value={form.projectType || "personal"} onChange={(e) => setForm({ ...form, projectType: e.target.value as "personal" | "client" })} className="p-2 border ">
-                <option value="personal">Personal</option>
-                <option value="client">Client Work</option>
-              </select>
-
-              <label className="text-sm">Order:</label>
-              <input type="number" value={form.order ?? ""} onChange={(e) => setForm({ ...form, order: e.target.value ? Number(e.target.value) : undefined })} className="p-2 border  w-24" />
-            </div>
-
-            <div>
-              <div className="text-sm mb-2">Choose tech stack:</div>
-              {errors.stack ? <div className="text-red-600 text-sm mb-2">{errors.stack}</div> : null}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {Object.keys(technicalAssets).map((key) => {
-                  const label = (key === "reactNative") ? "React Native" : (key.charAt(0).toUpperCase() + key.slice(1));
-                  const checked = Array.isArray(form.stack) ? (form.stack as string[]).includes(key) : false;
-                  return (
-                    <label key={key} className="inline-flex items-center gap-2 p-2 border  cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={(e) => {
-                          const prev = Array.isArray(form.stack) ? [...(form.stack as string[])] : [];
-                          if (e.target.checked) prev.push(key);
-                          else {
-                            const idx = prev.indexOf(key);
-                            if (idx > -1) prev.splice(idx, 1);
-                          }
-                          setForm({ ...form, stack: prev });
-                          setErrors(prevErr=>{ const c={...prevErr}; delete c.stack; return c; });
-                        }}
-                      />
-                      <img src={(technicalAssets as any)[key]} className="w-4 h-4" alt={label} />
-                      <span className="text-sm">{label}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-
-            <textarea value={form.description || ""} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" className="p-2 border " />
-          </div>
-          <div className="flex gap-2">
-            <button type="submit" className="px-4 py-2 bg-purple-600 text-white ">{editingId ? "Update" : "Add"} Project</button>
-            <button type="button" className="px-4 py-2 border " onClick={() => { setForm({}); setEditingId(null); }}>Cancel</button>
-          </div>
-          </form>
-        )}
-
-        <div className="flex gap-2 mb-4">
-          {(["all", "personal", "client"] as const).map((t) => (
+      <div className="max-w-lg mx-auto px-4 pt-4 pb-20">
+        {/* Filter pills */}
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1 [scrollbar-width:none]">
+          {(["all", "personal", "client"] as Filter[]).map((f) => (
             <button
-              key={t}
-              onClick={() => setFilter(t)}
-              className={`px-3 py-1 border text-sm capitalize ${filter === t ? "bg-purple-600 text-white" : "bg-white dark:bg-black"}`}
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
+                filter === f ? "bg-[#007aff] text-white" : "bg-white text-[#8e8e93] border border-[#e5e5ea]"
+              }`}
             >
-              {t === "client" ? "Client Work" : t}
+              {f === "client" ? "Client work" : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
         </div>
 
-        <div className="space-y-4">
-          {loading ? <div>Loading...</div> : null}
-          {Array.isArray(projects) && projects
-            .filter((p) => filter === "all" || p.projectType === filter)
-            .map((p, idx) => (
-            <div key={p?.id ?? idx} className="p-4 border  bg-white dark:bg-black flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex justify-end w-full mb-2">
-                <div className="flex gap-4"> <LucideDelete size={26} onClick={() => removeProject(p.id)} className="w-4 h-4 text-red-600 cursor-pointer hover:text-red-800" />
-                    <LucidePencil size={26} onClick={() => startEdit(p)} className="w-4 h-4 text-purple-600 cursor-pointer hover:text-purple-800" />
-                    <LucideEye size={26} onClick={() => window.open(p.link, "_blank")} className="w-4 h-4 text-green-600 cursor-pointer hover:text-green-800" />
-                </div>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{p.name}</h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300">{p.description}</p>
-                <div className="mt-2">{stackDisplay(p.stack)}</div>
-                <div className="flex gap-4 mt-2">
-                  <div className="text-sm">Type: <strong className="capitalize">{p.projectType ?? 'personal'}</strong></div>
-                  <div className="text-sm">Visibility: <strong>{p.visibility ?? 'public'}</strong></div>
-                  <div className="text-sm">Order: <strong>{p.order ?? 0}</strong></div>
-                </div>
-              </div>
-              <div className="mt-3 sm:mt-0 flex gap-2 items-center">
-               
-               
-                
-                <div className="flex flex-col ml-2">
-                  <button title="Move up" onClick={() => updateProjectOrder(p.id, (p.order ?? 0) - 1)} className="px-2 py-1 border ">▲</button>
-                  <button title="Move down" onClick={() => updateProjectOrder(p.id, (p.order ?? 0) + 1)} className="mt-1 px-2 py-1 border ">▼</button>
-                </div>
-              </div>
+        {/* Count */}
+        <p className="text-[12px] text-[#8e8e93] font-medium mb-3 px-1">
+          {filtered.length} {filtered.length === 1 ? "project" : "projects"}
+        </p>
+
+        {loading && (
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 border-2 border-[#007aff] border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+
+        {!loading && filtered.length === 0 && (
+          <div className="bg-white rounded-2xl p-10 text-center shadow-sm">
+            <div className="w-14 h-14 bg-[#f2f2f7] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Briefcase className="w-6 h-6 text-[#8e8e93]" strokeWidth={1.5} />
             </div>
-          ))}
+            <p className="text-[15px] font-semibold text-[#1c1c1e] mb-1">No projects yet</p>
+            <p className="text-[13px] text-[#8e8e93] mb-5">Add your first project to get started.</p>
+            <button
+              onClick={() => { resetForm(); setView("form"); }}
+              className="bg-[#007aff] text-white text-[14px] font-semibold px-6 py-2.5 rounded-full"
+            >
+              Add project
+            </button>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {filtered.map((p, idx) => {
+            const stackArr: string[] = Array.isArray(p.stack) ? p.stack as string[] : [];
+            return (
+              <div key={p.id ?? idx} className="bg-white rounded-2xl overflow-hidden shadow-sm">
+                {/* Cover image */}
+                {p.image && (
+                  <div className="aspect-video bg-[#f2f2f7]">
+                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  </div>
+                )}
+
+                <div className="p-4">
+                  {/* Header row */}
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[16px] font-semibold text-[#1c1c1e] leading-snug">{p.name}</h3>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        <span className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full ${
+                          p.projectType === "client" ? "bg-[#ff9f0a]/15 text-[#ff9f0a]" : "bg-[#34c759]/15 text-[#34c759]"
+                        }`}>
+                          {p.projectType === "client" ? <Briefcase className="w-2.5 h-2.5" /> : <User className="w-2.5 h-2.5" />}
+                          {p.projectType === "client" ? "Client" : "Personal"}
+                        </span>
+                        <span className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full ${
+                          p.visibility === "private" ? "bg-[#8e8e93]/15 text-[#8e8e93]" : "bg-[#007aff]/15 text-[#007aff]"
+                        }`}>
+                          {p.visibility === "private" ? <Lock className="w-2.5 h-2.5" /> : <Globe className="w-2.5 h-2.5" />}
+                          {p.visibility === "private" ? "Private" : "Public"}
+                        </span>
+                        {p.order !== undefined && (
+                          <span className="text-[11px] text-[#8e8e93]">#{p.order}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-[13px] text-[#8e8e93] leading-relaxed mb-3 line-clamp-2">{p.description}</p>
+
+                  {/* Stack logos */}
+                  {stackArr.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {stackArr.map((key: string) => {
+                        const logo = (technicalAssets as any)[key];
+                        const label = TECH_LABELS[key] ?? key;
+                        return (
+                          <div key={key} className="flex items-center gap-1.5 bg-[#f2f2f7] px-2 py-1 rounded-lg">
+                            {logo && <img src={logo} alt={label} className="w-3.5 h-3.5 object-contain" />}
+                            <span className="text-[11px] font-medium text-[#3a3a3c]">{label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-between pt-3 border-t border-[#f2f2f7]">
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => startEdit(p)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[13px] font-medium text-[#007aff] hover:bg-[#007aff]/10 transition-colors"
+                      >
+                        <Pencil className="w-3.5 h-3.5" strokeWidth={2} />
+                        Edit
+                      </button>
+                      {p.link && (
+                        <button
+                          onClick={() => window.open(p.link, "_blank")}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[13px] font-medium text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" strokeWidth={2} />
+                          View
+                        </button>
+                      )}
+                      <button
+                        onClick={() => removeProject(p.id)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[13px] font-medium text-[#ff3b30] hover:bg-[#ff3b30]/10 transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+                        Delete
+                      </button>
+                    </div>
+                    {/* Reorder */}
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => updateOrder(p.id, (p.order ?? 0) - 1)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#f2f2f7] text-[#3a3a3c]">
+                        <ChevronUp className="w-4 h-4" strokeWidth={2} />
+                      </button>
+                      <button onClick={() => updateOrder(p.id, (p.order ?? 0) + 1)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#f2f2f7] text-[#3a3a3c]">
+                        <ChevronDown className="w-4 h-4" strokeWidth={2} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
