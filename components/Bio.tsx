@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const Bio = () => {
   const [hoveredHighlight, setHoveredHighlight] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const highlightImages: Record<string, string> = {
     engineer: "/fashion.jpeg",
@@ -18,10 +17,7 @@ const Bio = () => {
   const handleHighlightHover = (highlight: string, e: React.MouseEvent) => {
     setHoveredHighlight(highlight);
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    setTooltipPos({
-      x: rect.left + rect.width / 2,
-      y: rect.top + 40,
-    });
+    setTooltipPos({ x: rect.left + rect.width / 2, y: rect.top + 44 });
   };
 
   const handleMouseLeave = () => setHoveredHighlight(null);
@@ -32,13 +28,7 @@ const Bio = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [hoveredHighlight]);
 
-  const Highlight = ({
-    children,
-    label,
-  }: {
-    children: React.ReactNode;
-    label: string;
-  }) => (
+  const Highlight = ({ children, label }: { children: React.ReactNode; label: string }) => (
     <span
       className="text-ember cursor-pointer relative inline-block border-b border-ember/40 hover:border-ember transition-colors"
       onMouseEnter={(e) => handleHighlightHover(label, e)}
@@ -47,6 +37,14 @@ const Bio = () => {
       {children}
     </span>
   );
+
+  /* iOS-style card pills */
+  const pills = [
+    { emoji: "💻", label: "Software Engineer" },
+    { emoji: "🏋️", label: "Bodybuilder" },
+    { emoji: "🚀", label: "Entrepreneur" },
+    { emoji: "✝️", label: "Christian" },
+  ];
 
   return (
     <section className="w-full px-6 sm:px-10 py-24 sm:py-32 border-t border-line relative">
@@ -60,6 +58,29 @@ const Bio = () => {
         01 — Who&apos;s Building This
       </motion.p>
 
+      {/* iOS-style identity pills */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="flex flex-wrap gap-2 mb-10"
+      >
+        {/* {pills.map((p, i) => (
+          <motion.div
+            key={p.label}
+            initial={{ opacity: 0, scale: 0.85 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 + i * 0.07 }}
+            className="flex items-center gap-2 bg-white/[0.06] border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-sm"
+          >
+            <span className="text-sm">{p.emoji}</span>
+            <span className="font-mono text-[11px] uppercase tracking-wide text-graphite">{p.label}</span>
+          </motion.div>
+        ))} */}
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -69,78 +90,32 @@ const Bio = () => {
       >
         <p>
           I&apos;m a Kampala-based{" "}
-          software engineer
-          specializing in building modern web and mobile applications with
-          React, React Native, and Node.js. I have a deep passion for AI,
-          machine learning, entrepreneurship
-          and real estate — driven by both business impact and architectural
-          beauty. I&apos;m dedicated to creating value through innovative and
-          impactful ventures.
-            <br/>
-           Above all, I&apos;m a devoted Christian and lover of God,
-                guided by faith in both my personal life and professional
-                journey.
+          <Highlight label="engineer">software engineer</Highlight> specializing
+          in modern web and mobile applications with React, React Native, and
+          Node.js. I have a deep passion for AI, machine learning,{" "}
+          <Highlight label="entrepreneurship">entrepreneurship</Highlight> and
+          real estate — driven by both business impact and architectural beauty.
+          <br/>
+          I&apos;m a devoted Christian, guided by faith in both my
+          personal life and professional journey.
         </p>
-
-        {/* {!isExpanded && (
-          <button
-            onClick={() => setIsExpanded(true)}
-            className="font-mono text-xs uppercase tracking-wide text-chrome hover:text-bone transition-colors focus-ring"
-          >
-            + Read the rest
-          </button>
-        )} */}
-
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-5 overflow-hidden"
-            >
-              <p>
-                Beyond the professional realm, I&apos;m also a{" "}
-               <span className="text-red-500">professional bodybuilder</span>,
-                dedicated to discipline, strength, and continuous
-                self-improvement. I&apos;m equally passionate about{" "}
-                fashion; I love
-                clothes, shoes, and the art of dressing well.
-              </p>
-              <p>
-                Above all, I&apos;m a devoted Christian and lover of God,
-                guided by faith in both my personal life and professional
-                journey.
-              </p>
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="font-mono text-xs uppercase tracking-wide text-graphite hover:text-bone transition-colors focus-ring"
-              >
-                — Show less
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        
       </motion.div>
 
+      {/* Hover image tooltip */}
       <AnimatePresence>
         {hoveredHighlight && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.88, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.88, y: 8 }}
             transition={{ duration: 0.2 }}
-            className="fixed w-56 h-56 overflow-hidden shadow-2xl border border-ember/50 z-50"
-            style={{
-              left: `${tooltipPos.x - 112}px`,
-              top: `${tooltipPos.y}px`,
-            }}
+            className="fixed w-52 h-52 overflow-hidden shadow-2xl border border-white/10 z-50 rounded-2xl"
+            style={{ left: `${tooltipPos.x - 104}px`, top: `${tooltipPos.y}px` }}
             onMouseEnter={() => setHoveredHighlight(hoveredHighlight)}
             onMouseLeave={handleMouseLeave}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={highlightImages[hoveredHighlight] || "/me.jpg"}
               alt="Profile"
