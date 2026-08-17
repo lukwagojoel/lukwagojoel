@@ -33,15 +33,13 @@
 
 "use client";
 
+import { ScrollExperience } from "@/components/kprstyle/Effects/scrollExp";
 import React from "react";
-import { Hero } from "@/components/kprstyle/Hero";
-import { NextSection } from "@/components/kprstyle/NextSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-lime-400 selection:text-black">
-      <Hero />
-      <NextSection />
+      <ScrollExperience />
     </main>
   );
 }

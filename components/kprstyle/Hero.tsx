@@ -245,28 +245,24 @@
 
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform, MotionValue } from "framer-motion";
 
-export const Hero = () => {
+interface HeroProps {
+  progress: MotionValue<number>;
+}
+
+export const Hero = ({ progress }: HeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const targetRef = useRef<HTMLDivElement>(null);
 
-  // Track scroll progress across a 250vh track
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Hero scales down dramatically from 1 to 0.2 and fades to opacity 0
-  const scale = useTransform(scrollYProgress, [0, 0.75], [1, 0.2]);
-  const borderRadius = useTransform(scrollYProgress, [0, 0.5], ["0px", "48px"]);
-  const opacity = useTransform(scrollYProgress, [0.35, 0.75], [1, 0]);
+  // Hero fully shrinks/fades in the FIRST HALF of the shared timeline
+  const scale = useTransform(progress, [0, 0.45], [1, 0.15]);
+  const borderRadius = useTransform(progress, [0, 0.3], ["0px", "48px"]);
+  const opacity = useTransform(progress, [0.3, 0.5], [1, 0]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // --- THREE.JS SCENE SETUP ---
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -275,43 +271,29 @@ export const Hero = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // --- UNIFORMS FOR SHADER ---
     const uniforms = {
-      u_resolution: {
-        value: new THREE.Vector2(container.clientWidth, container.clientHeight),
-      },
-      u_image_resolution: {
-        value: new THREE.Vector2(1, 1),
-      },
+      u_resolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
+      u_image_resolution: { value: new THREE.Vector2(1, 1) },
       u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
       u_mouse_dir: { value: new THREE.Vector2(0.0, 0.0) },
       u_intensity: { value: 0.0 },
       u_texture: { value: null as THREE.Texture | null },
     };
 
-    // --- DYNAMIC TEXTURE LOADER ---
     const textureLoader = new THREE.TextureLoader();
     let activeImagePath = "";
 
     const loadResponsiveTexture = () => {
       const isMobile = window.innerWidth < 768;
       const targetPath = isMobile ? "/me1.jpg" : "/me24.jpg";
-
       if (activeImagePath === targetPath) return;
-
       activeImagePath = targetPath;
       textureLoader.load(targetPath, (tex) => {
         tex.minFilter = THREE.LinearFilter;
-        if (uniforms.u_texture.value) {
-          uniforms.u_texture.value.dispose();
-        }
+        if (uniforms.u_texture.value) uniforms.u_texture.value.dispose();
         uniforms.u_texture.value = tex;
-
         if (tex.image) {
-          uniforms.u_image_resolution.value.set(
-            tex.image.width,
-            tex.image.height
-          );
+          uniforms.u_image_resolution.value.set(tex.image.width, tex.image.height);
         }
       });
     };
@@ -342,7 +324,6 @@ export const Hero = () => {
           float rs = s.x / s.y;
           float ri = i.x / i.y;
           vec2 newUv = uv;
-          
           if (rs > ri) {
             newUv.y = (uv.y - 0.5) * (ri / rs) + 0.5;
           } else {
@@ -359,11 +340,8 @@ export const Hero = () => {
           vec2 directionalPush = u_mouse_dir * smoothstep(0.25, 0.0, dist) * 0.04;
           vec2 distortion = (vec2(wave * 0.015) + directionalPush) * u_intensity;
           vec2 distortedUv = vUv - distortion;
-
           vec2 coverUv = getCoverUv(distortedUv, u_resolution, u_image_resolution);
-          vec4 color = texture2D(u_texture, coverUv);
-
-          gl_FragColor = color;
+          gl_FragColor = texture2D(u_texture, coverUv);
         }
       `,
     });
@@ -372,7 +350,6 @@ export const Hero = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // --- MOUSE TRACKING ---
     const targetMouse = { x: 0.5, y: 0.5 };
     const smoothMouse = { x: 0.5, y: 0.5 };
     const smoothDir = { x: 0.0, y: 0.0 };
@@ -382,7 +359,6 @@ export const Hero = () => {
       targetMouse.x = (e.clientX - rect.left) / rect.width;
       targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
     };
-
     window.addEventListener("mousemove", handleMouseMove);
 
     const handleResize = () => {
@@ -391,10 +367,8 @@ export const Hero = () => {
       const height = container.clientHeight;
       renderer.setSize(width, height);
       uniforms.u_resolution.value.set(width, height);
-
       loadResponsiveTexture();
     };
-
     window.addEventListener("resize", handleResize);
 
     let animationFrameId: number;
@@ -405,7 +379,6 @@ export const Hero = () => {
     const animate = () => {
       const prevX = smoothMouse.x;
       const prevY = smoothMouse.y;
-
       smoothMouse.x += (targetMouse.x - smoothMouse.x) * POSITION_LERP;
       smoothMouse.y += (targetMouse.y - smoothMouse.y) * POSITION_LERP;
 
@@ -416,41 +389,28 @@ export const Hero = () => {
       if (speed > MOVE_EPSILON) {
         const nx = dx / speed;
         const ny = dy / speed;
-
         smoothDir.x += (nx - smoothDir.x) * DIR_LERP;
         smoothDir.y += (ny - smoothDir.y) * DIR_LERP;
-
         const gain = Math.min(speed * 40, 1.0);
-        uniforms.u_intensity.value = Math.min(
-          uniforms.u_intensity.value + gain * 0.15,
-          1.0
-        );
+        uniforms.u_intensity.value = Math.min(uniforms.u_intensity.value + gain * 0.15, 1.0);
       }
 
       uniforms.u_mouse.value.set(smoothMouse.x, smoothMouse.y);
       uniforms.u_mouse_dir.value.set(smoothDir.x, smoothDir.y);
-
       uniforms.u_intensity.value *= 0.94;
-      if (uniforms.u_intensity.value < 0.001) {
-        uniforms.u_intensity.value = 0.0;
-      }
+      if (uniforms.u_intensity.value < 0.001) uniforms.u_intensity.value = 0.0;
 
       renderer.render(scene, camera);
       animationFrameId = requestAnimationFrame(animate);
     };
-
     animate();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
-      if (uniforms.u_texture.value) {
-        uniforms.u_texture.value.dispose();
-      }
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+      if (uniforms.u_texture.value) uniforms.u_texture.value.dispose();
       geometry.dispose();
       material.dispose();
       renderer.dispose();
@@ -458,30 +418,23 @@ export const Hero = () => {
   }, []);
 
   return (
-    <div ref={targetRef} className="relative h-[250vh] w-full bg-black">
-      {/* Sticky viewport frame */}
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        <motion.div
-          style={{ scale, borderRadius, opacity }}
-          className="relative w-full h-full bg-black overflow-hidden font-mono select-none border border-white/10 shadow-2xl"
-        >
-          {/* Canvas Container */}
-          <div ref={containerRef} className="absolute inset-0 w-full h-full z-0" />
+    <motion.div
+      style={{ scale, borderRadius, opacity }}
+      className="absolute inset-0 z-10 w-full h-full bg-black overflow-hidden font-mono select-none border border-white/10 shadow-2xl origin-center will-change-transform"
+    >
+      <div ref={containerRef} className="absolute inset-0 w-full h-full z-0" />
 
-          {/* HUD Content */}
-          <div className="absolute bottom-10 left-6 sm:left-12 right-6 z-10 pointer-events-none select-none">
-            <h1 className="font-extrabold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] tracking-tighter uppercase leading-[0.78] text-white">
-              LUKWAGO <br />
-              JOEL.
-            </h1>
-          </div>
-
-          <div className="absolute bottom-8 right-8 sm:right-14 z-10 font-medium text-xs tracking-widest text-white/70 flex items-center gap-2.5 pointer-events-none">
-            <span>SCROLL</span>
-            <span className="animate-bounce text-base">↓</span>
-          </div>
-        </motion.div>
+      <div className="absolute bottom-10 left-6 sm:left-12 right-6 z-10 pointer-events-none select-none">
+        <h1 className="font-extrabold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] tracking-tighter uppercase leading-[0.78] text-white">
+          LUKWAGO <br />
+          JOEL.
+        </h1>
       </div>
-    </div>
+
+      <div className="absolute bottom-8 right-8 sm:right-14 z-10 font-medium text-xs tracking-widest text-white/70 flex items-center gap-2.5 pointer-events-none">
+        <span>SCROLL</span>
+        <span className="animate-bounce text-base">↓</span>
+      </div>
+    </motion.div>
   );
 };

@@ -66,7 +66,7 @@ export const Header = () => {
 
         {/* Top-Right Corner Box: Contact Button */}
         <div className="absolute top-0 right-0 w-36 sm:w-48 h-16 flex items-center justify-center pointer-events-auto">
-          <ClippedButton onClick={() => (window.location.href = "#contact")}>
+          <ClippedButton onClick={() => (window.location.href = "/contact")}>
             CONTACT
           </ClippedButton>
         </div>

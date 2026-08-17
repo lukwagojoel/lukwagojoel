@@ -7,13 +7,13 @@ export const NAV_LINKS = [
 
 export const SIDEBAR_LINKS = [
   { label: "STORY", href: "#story", page: "001" },
-  { label: "PROJECTS", href: "#projects" },
-  { label: "GALLERY", href: "#gallery" },
-{ label: "CLIENTEL", href: "#clientel" },
+  { label: "PROJECTS", href: "projects" },
+  { label: "GALLERY", href: "gallery" },
+{ label: "CLIENTEL", href: "clientel" },
   { label: "MERCHANDISE", href: "#merchandise" },
 ];
 export const SOCIAL_LINKS = [
-  { label: "GITHUB", href: "https://github.com" },
-  { label: "YOUTUBE", href: "https://youtube.com" },
-  { label: "TIKTOK", href: "https://tiktok.com" },
+  { label: "GITHUB", href: "https://github.com/lukwagojoel" },
+  { label: "YOUTUBE", href: "https://youtube.com/@lukwago_joel" },
+  { label: "TIKTOK", href: "https://tiktok.com/@lukwago_joel" },
 ];
