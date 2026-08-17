@@ -3,6 +3,7 @@ import { Bebas_Neue, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import {personJsonLd} from "../components/identity";
 import CustomCursor from "@/components/cusor";
+import { Header } from "@/components/kprstyle/Header";
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -79,7 +80,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/me.jpg",
+        url: "/me1.jpg",
         width: 1200,
         height: 630,
         alt: "Lukwago Joel",
@@ -126,9 +127,10 @@ export default function RootLayout({
     __html: JSON.stringify(personJsonLd),
   }}
 />
-        <div className="grain" aria-hidden="true" />
-        <CustomCursor/>
+        <div />
+        <Header/>
         {children}
+        
       </body>
     </html>
   );

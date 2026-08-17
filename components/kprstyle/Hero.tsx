@@ -24,18 +24,44 @@ export const Hero = () => {
       u_resolution: {
         value: new THREE.Vector2(container.clientWidth, container.clientHeight),
       },
+      u_image_resolution: {
+        value: new THREE.Vector2(1, 1), // Updated when texture loads
+      },
       u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
       u_mouse_dir: { value: new THREE.Vector2(0.0, 0.0) },
       u_intensity: { value: 0.0 }, // Decays to 0 when mouse stops moving
       u_texture: { value: null as THREE.Texture | null },
     };
 
-    // Load background artwork
+    // --- DYNAMIC TEXTURE LOADER (DESKTOP vs MOBILE) ---
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load("/3js.jpg", (tex) => {
-      tex.minFilter = THREE.LinearFilter;
-      uniforms.u_texture.value = tex;
-    });
+    let activeImagePath = "";
+
+    const loadResponsiveTexture = () => {
+      const isMobile = window.innerWidth < 768;
+      const targetPath = isMobile ? "/me1.jpg" : "/me24.jpg";
+
+      if (activeImagePath === targetPath) return;
+
+      activeImagePath = targetPath;
+      textureLoader.load(targetPath, (tex) => {
+        tex.minFilter = THREE.LinearFilter;
+        if (uniforms.u_texture.value) {
+          uniforms.u_texture.value.dispose();
+        }
+        uniforms.u_texture.value = tex;
+        
+        // Pass natural image aspect ratio to uniforms
+        if (tex.image) {
+          uniforms.u_image_resolution.value.set(
+            tex.image.width,
+            tex.image.height
+          );
+        }
+      });
+    };
+
+    loadResponsiveTexture();
 
     const material = new THREE.ShaderMaterial({
       uniforms,
@@ -49,10 +75,27 @@ export const Hero = () => {
       fragmentShader: `
         uniform sampler2D u_texture;
         uniform vec2 u_resolution;
+        uniform vec2 u_image_resolution;
         uniform vec2 u_mouse;
         uniform vec2 u_mouse_dir;
         uniform float u_intensity;
         varying vec2 vUv;
+
+        // Aspect Ratio Correction (Simulates object-fit: cover)
+        vec2 getCoverUv(vec2 uv, vec2 screenRes, vec2 imageRes) {
+          vec2 s = screenRes;
+          vec2 i = imageRes;
+          float rs = s.x / s.y;
+          float ri = i.x / i.y;
+          vec2 newUv = uv;
+          
+          if (rs > ri) {
+            newUv.y = (uv.y - 0.5) * (ri / rs) + 0.5;
+          } else {
+            newUv.x = (uv.x - 0.5) * (rs / ri) + 0.5;
+          }
+          return newUv;
+        }
 
         void main() {
           vec2 st = gl_FragCoord.xy / u_resolution;
@@ -71,7 +114,11 @@ export const Hero = () => {
           vec2 distortion = (vec2(wave * 0.015) + directionalPush) * u_intensity;
           
           vec2 distortedUv = vUv - distortion;
-          vec4 color = texture2D(u_texture, distortedUv);
+
+          // Apply cover crop scaling to prevent stretching on mobile aspect ratios
+          vec2 coverUv = getCoverUv(distortedUv, u_resolution, u_image_resolution);
+
+          vec4 color = texture2D(u_texture, coverUv);
 
           gl_FragColor = color;
         }
@@ -83,8 +130,6 @@ export const Hero = () => {
     scene.add(mesh);
 
     // --- MOUSE TRACKING ---
-    // Raw mousemove only records a TARGET position. All smoothing happens
-    // per-frame in the animation loop, decoupled from event timing.
     const targetMouse = { x: 0.5, y: 0.5 };
     const smoothMouse = { x: 0.5, y: 0.5 };
     const smoothDir = { x: 0.0, y: 0.0 };
@@ -104,28 +149,25 @@ export const Hero = () => {
       const height = container.clientHeight;
       renderer.setSize(width, height);
       uniforms.u_resolution.value.set(width, height);
+
+      loadResponsiveTexture();
     };
 
     window.addEventListener("resize", handleResize);
 
     // --- ANIMATION LOOP ---
     let animationFrameId: number;
-    const POSITION_LERP = 0.15; // how quickly the ripple chases the real cursor
-    const DIR_LERP = 0.2; // how quickly direction settles (lower = smoother, more lag)
-    const MOVE_EPSILON = 0.0008; // below this frame-to-frame distance, treat as "not moving"
+    const POSITION_LERP = 0.15;
+    const DIR_LERP = 0.2;
+    const MOVE_EPSILON = 0.0008;
 
     const animate = () => {
-      // Ease the ripple's position toward the real cursor position instead
-      // of snapping to it - this alone removes most of the stutter.
       const prevX = smoothMouse.x;
       const prevY = smoothMouse.y;
 
       smoothMouse.x += (targetMouse.x - smoothMouse.x) * POSITION_LERP;
       smoothMouse.y += (targetMouse.y - smoothMouse.y) * POSITION_LERP;
 
-      // Derive velocity from the SMOOTHED position (frame-to-frame), not the
-      // raw event delta. This is what actually kills the jitter, since raw
-      // per-event deltas are tiny/noisy and blow up when normalized.
       const dx = smoothMouse.x - prevX;
       const dy = smoothMouse.y - prevY;
       const speed = Math.sqrt(dx * dx + dy * dy);
@@ -133,12 +175,10 @@ export const Hero = () => {
       if (speed > MOVE_EPSILON) {
         const nx = dx / speed;
         const ny = dy / speed;
-        // Ease the direction too, so it doesn't snap when the cursor curves
+
         smoothDir.x += (nx - smoothDir.x) * DIR_LERP;
         smoothDir.y += (ny - smoothDir.y) * DIR_LERP;
 
-        // Scale intensity gain by how fast the cursor is actually moving,
-        // instead of a flat +0.8 per event regardless of speed.
         const gain = Math.min(speed * 40, 1.0);
         uniforms.u_intensity.value = Math.min(
           uniforms.u_intensity.value + gain * 0.15,
@@ -149,7 +189,6 @@ export const Hero = () => {
       uniforms.u_mouse.value.set(smoothMouse.x, smoothMouse.y);
       uniforms.u_mouse_dir.value.set(smoothDir.x, smoothDir.y);
 
-      // Smoothly fade ripples to complete stillness when cursor stops
       uniforms.u_intensity.value *= 0.94;
       if (uniforms.u_intensity.value < 0.001) {
         uniforms.u_intensity.value = 0.0;
@@ -169,6 +208,9 @@ export const Hero = () => {
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
+      if (uniforms.u_texture.value) {
+        uniforms.u_texture.value.dispose();
+      }
       geometry.dispose();
       material.dispose();
       renderer.dispose();
@@ -182,9 +224,9 @@ export const Hero = () => {
 
       {/* OVERLAY HUD ELEMENTS */}
 
-      {/* Enlarged Main Full-Bleed Name */}
+      {/* Main Full-Bleed Name */}
       <div className="absolute bottom-10 left-6 sm:left-12 right-6 z-10 pointer-events-none select-none">
-        <h1 className="font-extrabold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] tracking-tighter uppercase leading-[0.78] text-white drop-shadow-[0_8px_25px_rgba(0,0,0,0.9)]">
+        <h1 className="font-extrabold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] tracking-tighter uppercase leading-[0.78] text-white">
           LUKWAGO <br />
           JOEL.
         </h1>

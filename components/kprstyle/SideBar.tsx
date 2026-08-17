@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiX } from "react-icons/fi";
 import { SIDEBAR_LINKS, SOCIAL_LINKS } from "../../data/Navigation";
@@ -12,38 +13,46 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop Overlay */}
+          {/* Transparent Vignette Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 z-[9998] cursor-pointer bg-gradient-to-r from-black/40 via-black/10 to-transparent backdrop-blur-[2px]"
+            style={{
+              maskImage:
+                "linear-gradient(to right, black 0%, black 30%, transparent 60%)",
+              WebkitMaskImage:
+                "linear-gradient(to right, black 0%, black 30%, transparent 60%)",
+            }}
           />
 
-          {/* Floating Drawer Container */}
+          {/* Drawer Container: Full Screen on Mobile, Floating Card on Desktop */}
           <motion.aside
             initial={{ x: "-110%" }}
             animate={{ x: 0 }}
             exit={{ x: "-110%" }}
             transition={{ type: "spring", damping: 26, stiffness: 220 }}
-            className="fixed top-3 left-3 bottom-3 sm:top-6 sm:left-6 sm:bottom-6 h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-3rem)] w-[calc(100%-1.5rem)] max-w-sm sm:max-w-lg md:max-w-xl bg-zinc-950/95 text-white z-50 flex flex-col justify-between border border-white/20 rounded-2xl sm:rounded-3xl p-6 sm:p-10 font-mono shadow-2xl overflow-y-auto relative"
+            className="fixed inset-0 sm:top-6 sm:left-6 sm:bottom-6 sm:inset-auto w-full h-full sm:h-[calc(100vh-3rem)] sm:w-[calc(100%-1.5rem)] max-w-none sm:max-w-lg md:max-w-xl bg-zinc-950/95 sm:bg-zinc-950/90 backdrop-blur-md text-white z-[9999] flex flex-col justify-between border-0 sm:border border-white/20 rounded-none sm:rounded-3xl p-6 sm:p-10 font-mono shadow-2xl overflow-y-auto"
           >
-            {/* 
-              INTERNAL SIDEBAR GRID LINES
-              Subtle HUD grid overlay echoing the main layout
-            */}
-            <div className="absolute inset-0 pointer-events-none select-none rounded-2xl sm:rounded-3xl overflow-hidden">
-              {/* Vertical accent grid line */}
+            {/* Internal HUD Grid Overlay */}
+            <div className="absolute inset-0 pointer-events-none select-none rounded-none sm:rounded-3xl overflow-hidden">
               <div className="absolute top-0 bottom-0 left-12 sm:left-16 border-r border-white/10" />
-              {/* Horizontal accent grid lines */}
               <div className="absolute top-20 left-0 right-0 border-b border-white/10" />
               <div className="absolute bottom-28 left-0 right-0 border-t border-white/10" />
-              {/* HUD Crosshair Accent */}
               <div className="absolute left-12 sm:left-16 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/30 text-[10px]">
                 ┼
               </div>
@@ -64,7 +73,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 </button>
               </div>
 
-              {/* Navigation Links with Larger Responsive Font */}
+              {/* Navigation Links */}
               <nav className="mt-8 sm:mt-12 flex flex-col gap-4 sm:gap-6">
                 {SIDEBAR_LINKS.map((item, idx) => (
                   <motion.div
@@ -76,6 +85,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   >
                     <a
                       href={item.href}
+                      onClick={onClose}
                       className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight group-hover:text-lime-400 transition-colors uppercase leading-none py-1"
                     >
                       <ScrambleText text={item.label} />
@@ -120,6 +130,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </motion.aside>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };

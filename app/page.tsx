@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-lime-400 selection:text-black">
       {/* 1. Transparent Header with Drawer */}
-      <Header/>
+    
 
       {/* 2. Full-Screen Interactive Tilt Hero */}
       <Hero/>
