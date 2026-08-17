@@ -4,6 +4,7 @@ import "./globals.css";
 import {personJsonLd} from "../components/identity";
 import CustomCursor from "@/components/cusor";
 import { Header } from "@/components/kprstyle/Header";
+import { Footer } from "@/components/kprstyle/Footer";
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -130,6 +131,7 @@ export default function RootLayout({
         <div />
         <Header/>
         {children}
+        <Footer/>
         
       </body>
     </html>
