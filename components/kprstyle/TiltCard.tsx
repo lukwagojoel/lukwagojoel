@@ -6,46 +6,39 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 interface TiltCardProps {
   children: React.ReactNode;
   className?: string;
-  /** Max tilt rotation in degrees. kprverse-style default is subtle, ~10-14deg. */
   maxTilt?: number;
-  /** How much the inner content "zooms" on hover, e.g. 1.06 = 6% scale */
   hoverScale?: number;
-  /** Spring stiffness - higher = snappier, lower = floatier */
   stiffness?: number;
   damping?: number;
 }
 
 /**
- * TiltCard - a 3D parallax tilt wrapper (kprverse-style hero hover effect)
+ * Updated TiltCard - Inside-Out depth effect.
  *
- * Wrap any image or card in this. It tracks the cursor's position relative
- * to the element's center and applies a CSS 3D transform, with a slight
- * inner scale to fake depth - the "looking into a window" trick.
- *
- * Usage:
- *   <TiltCard className="w-full max-w-md">
- *     <img src="/hero.jpg" alt="" className="w-full h-full object-cover" />
- *   </TiltCard>
+ * The outer container (ref) remains static.
+ * The inner container (motion.div) applies 3D tilt and scale.
+ * 'overflow-hidden' on the outer container guarantees the movement stays internal.
  */
 export default function TiltCard({
   children,
   className = "",
-  maxTilt = 12,
-  hoverScale = 1.06,
-  stiffness = 150,
-  damping = 20,
+  maxTilt = 10, // Subtle is key for KPR look
+  hoverScale = 1.08, // Keep slightly aggressive zoom inside bounds
+  stiffness = 180,
+  damping = 25,
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // raw mouse position (-0.5 to 0.5 relative to element)
+  // Raw mouse position (-0.5 to 0.5 relative to center)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // spring-smoothed values so the tilt settles instead of snapping
+  // Spring-smoothed values settle nicely
   const springX = useSpring(mouseX, { stiffness, damping });
   const springY = useSpring(mouseY, { stiffness, damping });
 
+  // Map spring values to 3D rotation degrees
   const rotateX = useTransform(springY, [-0.5, 0.5], [maxTilt, -maxTilt]);
   const rotateY = useTransform(springX, [-0.5, 0.5], [-maxTilt, maxTilt]);
 
@@ -53,6 +46,7 @@ export default function TiltCard({
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
 
+    // Calculate mouse position as a percentage relative to the center (-0.5 to 0.5)
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
 
@@ -72,33 +66,33 @@ export default function TiltCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden rounded-2xl [perspective:1000px] motion-reduce:!transform-none ${className}`}
+      // CRITICAL CHANGE: The wrapper is static, rounded, clipped, and provides perspective boundary.
+      className={`relative overflow-hidden rounded-2xl [perspective:1200px] ${className}`}
     >
+      {/* 
+         CRITICAL CHANGE: This inner motion.div moves, scales, and tilts.
+         We add a padding offset here to give the image room to rotate *into* 
+         the boundary without clipping prematurely, creating depth.
+      */}
       <motion.div
         style={{
           rotateX,
           rotateY,
-          transformStyle: "preserve-3d",
+          // Need preserve-3d to keep the Z-axis of the scale separate from XY rotation
+          transformStyle: "preserve-3d", 
         }}
         animate={{
+          // Slightly zoom *everything* inside when hovered
           scale: isHovered ? hoverScale : 1,
         }}
         transition={{ scale: { duration: 0.4, ease: "easeOut" } }}
-        className="h-full w-full motion-reduce:!transform-none"
+        className="relative h-full w-full motion-reduce:!transform-none"
       >
         {children}
       </motion.div>
 
-      {/* subtle sheen that moves opposite the tilt, sells the "glass window" feel */}
-      <motion.div
-        aria-hidden
-        style={{
-          opacity: useTransform(springX, [-0.5, 0.5], [0, 0]),
-        }}
-        animate={{ opacity: isHovered ? 0.08 : 0 }}
-        transition={{ duration: 0.4 }}
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-bone/40 to-transparent"
-      />
+      {/* Aesthetic inner framing border (non-interactive) */}
+      <div className="absolute inset-0 border border-white/10 rounded-2xl pointer-events-none z-10" />
     </div>
   );
 }

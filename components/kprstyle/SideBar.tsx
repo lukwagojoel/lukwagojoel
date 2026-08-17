@@ -4,6 +4,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiX } from "react-icons/fi";
 import { SIDEBAR_LINKS, SOCIAL_LINKS } from "../../data/Navigation";
+import { ScrambleText } from "./Effects/scrumble";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
+          {/* Backdrop Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -24,69 +25,94 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           />
 
-          {/* Drawer */}
+          {/* Floating Drawer Container */}
           <motion.aside
-            initial={{ x: "-100%" }}
+            initial={{ x: "-110%" }}
             animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 h-full w-full max-w-sm sm:max-w-md bg-black text-white z-50 flex flex-col justify-between border-r border-white/10 p-6 sm:p-10 font-mono"
+            exit={{ x: "-110%" }}
+            transition={{ type: "spring", damping: 26, stiffness: 220 }}
+            className="fixed top-3 left-3 bottom-3 sm:top-6 sm:left-6 sm:bottom-6 h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-3rem)] w-[calc(100%-1.5rem)] max-w-sm sm:max-w-lg md:max-w-xl bg-zinc-950/95 text-white z-50 flex flex-col justify-between border border-white/20 rounded-2xl sm:rounded-3xl p-6 sm:p-10 font-mono shadow-2xl overflow-y-auto relative"
           >
-            {/* Header & Close */}
-            <div>
-              <div className="flex justify-between items-center pb-8 border-b border-white/10">
-                <div className="text-xs uppercase tracking-widest text-lime-400">
+            {/* 
+              INTERNAL SIDEBAR GRID LINES
+              Subtle HUD grid overlay echoing the main layout
+            */}
+            <div className="absolute inset-0 pointer-events-none select-none rounded-2xl sm:rounded-3xl overflow-hidden">
+              {/* Vertical accent grid line */}
+              <div className="absolute top-0 bottom-0 left-12 sm:left-16 border-r border-white/10" />
+              {/* Horizontal accent grid lines */}
+              <div className="absolute top-20 left-0 right-0 border-b border-white/10" />
+              <div className="absolute bottom-28 left-0 right-0 border-t border-white/10" />
+              {/* HUD Crosshair Accent */}
+              <div className="absolute left-12 sm:left-16 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/30 text-[10px]">
+                ┼
+              </div>
+            </div>
+
+            {/* Header & Close Button */}
+            <div className="relative z-10">
+              <div className="flex justify-between items-center pb-6 border-b border-white/10">
+                <div className="text-xs sm:text-sm uppercase tracking-widest text-lime-400 font-bold">
                   ■ DISCOVER
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 text-2xl hover:text-lime-400 transition-colors"
+                  className="p-2 text-2xl sm:text-3xl hover:text-lime-400 transition-colors"
+                  aria-label="Close menu"
                 >
                   <FiX />
                 </button>
               </div>
 
-              {/* Navigation Items */}
-              <nav className="mt-8 flex flex-col gap-4">
+              {/* Navigation Links with Larger Responsive Font */}
+              <nav className="mt-8 sm:mt-12 flex flex-col gap-4 sm:gap-6">
                 {SIDEBAR_LINKS.map((item, idx) => (
-                  <motion.a
+                  <motion.div
                     key={item.label}
-                    href={item.href}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + idx * 0.05 }}
-                    className="group flex items-baseline justify-between text-2xl sm:text-4xl font-extrabold tracking-wider hover:text-lime-400 transition-colors"
+                    transition={{ delay: 0.08 + idx * 0.04 }}
+                    className="flex items-baseline justify-between group"
                   >
-                    <span>{item.label}</span>
+                    <a
+                      href={item.href}
+                      className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight group-hover:text-lime-400 transition-colors uppercase leading-none py-1"
+                    >
+                      <ScrambleText text={item.label} />
+                    </a>
+
                     {item.page && (
-                      <span className="text-xs bg-lime-400 text-black px-1.5 py-0.5 rounded-sm">
+                      <span className="text-[10px] sm:text-xs font-bold bg-lime-400 text-black px-1.5 sm:px-2 py-0.5 rounded-sm uppercase tracking-widest">
                         PAGE {item.page}
                       </span>
                     )}
-                  </motion.a>
+                  </motion.div>
                 ))}
               </nav>
             </div>
 
-            {/* Footer / Socials */}
-            <div className="border-t border-white/10 pt-6 space-y-4 text-xs">
+            {/* Footer / Social Links */}
+            <div className="relative z-10 border-t border-white/10 pt-6 sm:pt-8 space-y-4 text-xs sm:text-sm">
               <div>
-                <span className="text-gray-500 block mb-2">■ CONNECT</span>
-                <div className="flex gap-4">
+                <span className="text-gray-500 block mb-2 sm:mb-3 font-bold tracking-widest">
+                  ■ CONNECT
+                </span>
+                <div className="flex flex-wrap gap-4 sm:gap-6">
                   {SOCIAL_LINKS.map((s) => (
                     <a
                       key={s.label}
                       href={s.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-lime-400 transition-colors"
+                      className="hover:text-lime-400 transition-colors font-bold tracking-wider sm:text-base"
                     >
-                      {s.label}
+                      <ScrambleText text={s.label} />
                     </a>
                   ))}
                 </div>
               </div>
-              <div className="text-gray-600 flex justify-between pt-4">
+
+              <div className="text-gray-600 flex justify-between pt-3 border-t border-white/5 sm:text-xs">
                 <span>US-EN ▾</span>
                 <span>© {new Date().getFullYear()}</span>
               </div>
