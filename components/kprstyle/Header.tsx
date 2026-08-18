@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { FiMenu, FiVolume2, FiVolumeX } from "react-icons/fi";
+import { FiVolume2, FiVolumeX } from "react-icons/fi";
+import { RiMenuFold2Line } from "react-icons/ri";
 import { NAV_LINKS } from "../../data/Navigation";
 import { ClippedButton } from "./clippedButton";
 import { Sidebar } from "./SideBar";
@@ -47,7 +48,7 @@ export const Header = () => {
             className="text-white text-xl p-2 hover:text-fuchsia-400 transition-colors"
             aria-label="Open navigation menu"
           >
-            <FiMenu />
+            <RiMenuFold2Line/>
           </button>
         </div>
 
