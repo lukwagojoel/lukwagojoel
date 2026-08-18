@@ -1,6 +1,7 @@
 export const NAV_LINKS = [
-  { label: "PROJECT", href: "#project" },
   { label: "THE KEEP", href: "#keep" },
+  { label: "PROJECTS", href: "#projects" },
+  
   { label: "FACTIONS", href: "#factions" },
  
 ];
@@ -13,6 +14,7 @@ export const SIDEBAR_LINKS = [
   { label: "MERCHANDISE", href: "#merchandise" },
 ];
 export const SOCIAL_LINKS = [
+  { label: "LINKEDIN", href: "https://www.linkedin.com/in/lukwago-joel-933822221" },
   { label: "GITHUB", href: "https://github.com/lukwagojoel" },
   { label: "YOUTUBE", href: "https://youtube.com/@lukwago_joel" },
   { label: "TIKTOK", href: "https://tiktok.com/@lukwago_joel" },

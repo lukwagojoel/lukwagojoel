@@ -11,7 +11,7 @@ export const personJsonLd = {
 
   url: "https://lukwagojoel.com",
 
-  image: "https://lukwagojoel.com/me.jpg",
+  image: "https://lukwagojoel.com/me1.jpg",
 
   jobTitle: "Software Engineer",
 
@@ -41,10 +41,10 @@ export const personJsonLd = {
   ],
 
   sameAs: [
-    "https://github.com/yourgithub",
-    "https://linkedin.com/in/yourlinkedin",
-    "https://x.com/yourx",
-    "https://youtube.com/@youryoutube",
-    "https://hashnode.com/@yourhashnode",
+    "https://github.com/lukwagojoel",
+    "https://linkedin.com/in/lukwago-joel-933822221",
+    "https://tiktok.com/@lukwago_joel",
+    "https://youtube.com/@lukwago_joel",
+    "https://hashnode.com/@lukwago_joel",
   ],
 };
