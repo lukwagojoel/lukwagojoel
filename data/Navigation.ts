@@ -11,7 +11,7 @@ export const SIDEBAR_LINKS = [
   { label: "CLIENTEL", href: "/clientel" },
   { label: "PODCAST", href: "/podcast" },
   { label: "GALLERY", href: "/gallery" },
-  { label: "MERC", href: "/merch" },
+  { label: "MERCH", href: "/merch" },
 ];
 export const SOCIAL_LINKS = [
   { label: "LINKEDIN", href: "https://www.linkedin.com/in/lukwago-joel-933822221" },

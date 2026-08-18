@@ -427,7 +427,7 @@ export const Hero = ({ progress }: HeroProps) => {
       <div className="absolute bottom-10 left-6 sm:left-12 right-6 z-10 pointer-events-none select-none">
         <h1 className="font-extrabold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[11vw] tracking-tighter uppercase leading-[0.78] text-white">
           LUKWAGO <br />
-          JOEL.
+          JOEL
         </h1>
       </div>
 
