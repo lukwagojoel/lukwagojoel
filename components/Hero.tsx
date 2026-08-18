@@ -37,6 +37,25 @@ const stats = [
 export default function Hero() {
   return (
     <section className="relative w-full min-h-[100svh] overflow-hidden">
+      
+      {/* ── TOP RIGHT: HUD Bio Description Badge ── */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute top-6 right-6 sm:top-8 sm:right-10 z-30 max-w-[260px] sm:max-w-[300px] bg-black/60 border border-white/10 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl shadow-xl font-mono"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
+            AVAILABLE FOR PROJECTS
+          </span>
+        </div>
+        <p className="text-xs text-graphite leading-relaxed">
+          Front-end & Mobile Specialist building high-performance web applications across Uganda and beyond.
+        </p>
+      </motion.div>
+
       <div className="grid lg:grid-cols-[1.05fr_0.95fr] min-h-[100svh]">
         {/* Text column */}
         <div className="relative z-10 flex flex-col justify-center px-6 sm:px-10 py-28 lg:py-0 order-2 lg:order-1">
