@@ -6,8 +6,6 @@ import { DEMO_PROJECTS, ProjectFromAPI } from "@/data/projects";
 
 
 
-
-
 interface NextSectionProps {
   progress: MotionValue<number>;
 }
