@@ -44,7 +44,7 @@ export const Header = () => {
         <div className="absolute top-0 left-0 w-16 sm:w-20 h-16 flex items-center justify-center pointer-events-auto">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="text-white text-xl p-2 hover:text-lime-400 transition-colors"
+            className="text-white text-xl p-2 hover:text-fuchsia-400 transition-colors"
             aria-label="Open navigation menu"
           >
             <FiMenu />
@@ -75,7 +75,7 @@ export const Header = () => {
         <div className="absolute bottom-0 left-0 w-16 sm:w-20 h-12 flex items-center justify-center pointer-events-auto">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="text-white/60 hover:text-lime-400 transition-colors text-base p-2"
+            className="text-white/60 hover:text-fuchsia-400 transition-colors text-base p-2"
             aria-label="Toggle audio"
           >
             {isMuted ? <FiVolumeX /> : <FiVolume2 />}

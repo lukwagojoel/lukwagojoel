@@ -6,7 +6,7 @@
 
 // export default function Home() {
 //   return (
-//     <main className="min-h-screen bg-black text-white selection:bg-lime-400 selection:text-black">
+//     <main className="min-h-screen bg-black text-white selection:bg-fuchsia-400 selection:text-black">
 //       {/* 1. Transparent Header with Drawer */}
     
 
@@ -15,8 +15,8 @@
 
 //       {/* 3. Sample Secondary Content Section to Test Scroll & Header Overlay */}
 //       <section id="project" className="relative min-h-screen px-6 py-24 max-w-7xl mx-auto flex flex-col justify-center">
-//         <div className="border-l-2 border-lime-400 pl-6 space-y-4">
-//           <span className="font-mono text-xs text-lime-400 tracking-widest uppercase">
+//         <div className="border-l-2 border-fuchsia-400 pl-6 space-y-4">
+//           <span className="font-mono text-xs text-fuchsia-400 tracking-widest uppercase">
 //             [ 01 // OVERVIEW ]
 //           </span>
 //           <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight">
@@ -38,7 +38,7 @@ import React from "react";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-lime-400 selection:text-black">
+    <main className="min-h-screen bg-black text-white selection:bg-fuchsia-400 selection:text-black">
       <ScrollExperience />
     </main>
   );

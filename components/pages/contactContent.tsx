@@ -55,7 +55,7 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
           </h2>
 
           {/* Email Card */}
-          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-lime-400/50 transition-colors">
+          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 transition-colors">
             <span className="text-xs text-gray-500 uppercase">PRIMARY EMAIL</span>
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm sm:text-base font-bold text-white tracking-wide">
@@ -64,16 +64,16 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
               <button
                 type="button"
                 onClick={() => handleCopy(email, "email")}
-                className="p-2 border border-white/20 hover:border-lime-400 text-gray-400 hover:text-lime-400 transition-colors"
+                className="p-2 border border-white/20 hover:border-fuchsia-400 text-gray-400 hover:text-fuchsia-400 transition-colors"
                 aria-label="Copy Email"
               >
-                {copiedField === "email" ? <FiCheck className="text-lime-400" /> : <FiCopy />}
+                {copiedField === "email" ? <FiCheck className="text-fuchsia-400" /> : <FiCopy />}
               </button>
             </div>
           </div>
 
           {/* Phone Card */}
-          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-lime-400/50 transition-colors">
+          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 transition-colors">
             <span className="text-xs text-gray-500 uppercase">PHONE / WHATSAPP</span>
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm sm:text-base font-bold text-white tracking-wide">
@@ -82,21 +82,21 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
               <button
                 type="button"
                 onClick={() => handleCopy(phone, "phone")}
-                className="p-2 border border-white/20 hover:border-lime-400 text-gray-400 hover:text-lime-400 transition-colors"
+                className="p-2 border border-white/20 hover:border-fuchsia-400 text-gray-400 hover:text-fuchsia-400 transition-colors"
                 aria-label="Copy Phone"
               >
-                {copiedField === "phone" ? <FiCheck className="text-lime-400" /> : <FiCopy />}
+                {copiedField === "phone" ? <FiCheck className="text-fuchsia-400" /> : <FiCopy />}
               </button>
             </div>
           </div>
         </div>
 
         {/* Availability Badge */}
-        <div className="p-6 border border-lime-400/20 bg-lime-400/5 space-y-2">
-          <div className="flex items-center gap-2 text-lime-400 text-xs font-bold tracking-wider">
+        <div className="p-6 border border-fuchsia-400/20 bg-fuchsia-400/5 space-y-2">
+          <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-wider">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-lime-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
             </span>
             LOCATION & TIME
           </div>
@@ -124,14 +124,14 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
               className="space-y-8"
             >
               <div className="border-b border-white/10 pb-4 flex items-center justify-between">
-                <span className="text-xs text-lime-400 font-bold uppercase tracking-widest">
+                <span className="text-xs text-fuchsia-400 font-bold uppercase tracking-widest">
                   // TRANSMIT MESSAGE
                 </span>
                 <span className="text-xs text-gray-600">SECURE END-TO-END</span>
               </div>
 
               <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-lime-400 transition-colors uppercase">
+                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
                   01. YOUR NAME *
                 </label>
                 <input
@@ -140,12 +140,12 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   placeholder="JOHN DOE"
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-lime-400 transition-colors"
+                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
                 />
               </div>
 
               <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-lime-400 transition-colors uppercase">
+                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
                   02. YOUR EMAIL *
                 </label>
                 <input
@@ -154,12 +154,12 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   placeholder="JOHN@EXAMPLE.COM"
                   value={formState.email}
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-lime-400 transition-colors"
+                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
                 />
               </div>
 
               <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-lime-400 transition-colors uppercase">
+                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
                   03. PROJECT DETAILS *
                 </label>
                 <textarea
@@ -168,14 +168,14 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   placeholder="TELL ME ABOUT YOUR PROJECT GOALS, TIMELINE, AND SCOPE..."
                   value={formState.message}
                   onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-lime-400 transition-colors resize-none"
+                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-white text-black font-extrabold p-5 uppercase tracking-wider text-sm flex items-center justify-center gap-3 hover:bg-lime-400 transition-colors disabled:opacity-50 group"
+                className="w-full bg-white text-black font-extrabold p-5 uppercase tracking-wider text-sm flex items-center justify-center gap-3 hover:bg-fuchsia-400 transition-colors disabled:opacity-50 group"
               >
                 {isSubmitting ? (
                   <span className="animate-pulse flex items-center gap-2">
@@ -197,7 +197,7 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="py-16 text-center space-y-6"
             >
-              <div className="inline-flex p-4 border border-lime-400 rounded-full bg-lime-400/10 text-lime-400">
+              <div className="inline-flex p-4 border border-fuchsia-400 rounded-full bg-fuchsia-400/10 text-fuchsia-400">
                 <FiCheck className="text-3xl" />
               </div>
               <div className="space-y-2">
@@ -214,7 +214,7 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   setIsSubmitted(false);
                   setFormState({ name: "", email: "", subject: "PROJECT INQUIRY", message: "" });
                 }}
-                className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-lime-400 hover:text-white transition-colors uppercase pt-4"
+                className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-fuchsia-400 hover:text-white transition-colors uppercase pt-4"
               >
                 SEND ANOTHER MESSAGE <FiArrowUpRight />
               </button>

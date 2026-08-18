@@ -13,7 +13,7 @@ export default function ContactPage() {
   const formattedPhone = "+256 700 000 000";
 
   return (
-    <section className="relative min-h-screen w-full bg-black text-white font-mono overflow-hidden pt-28 pb-20 px-6 sm:px-12 selection:bg-lime-400 selection:text-black">
+    <section className="relative min-h-screen w-full bg-black text-white font-mono overflow-hidden pt-28 pb-20 px-6 sm:px-12 selection:bg-fuchsia-400 selection:text-black">
       {/* Background Grid Guidelines */}
       <div className="absolute inset-0 pointer-events-none select-none opacity-15">
         <div className="absolute top-0 bottom-0 left-6 sm:left-12 border-r border-white/20" />
@@ -24,7 +24,7 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header Section (Server Rendered) */}
         <div className="space-y-4 pb-12 border-b border-white/10">
-          <div className="flex items-center gap-2 text-lime-400 text-xs font-bold tracking-widest uppercase">
+          <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
             <FiTerminal className="animate-pulse" />
             <span>[ 02 // TRANSMISSION PROTOCOL ]</span>
           </div>

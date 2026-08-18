@@ -20,8 +20,8 @@ export const NextSection = ({ progress }: NextSectionProps) => {
       className="absolute inset-0 z-20 w-full h-full flex items-center justify-center overflow-hidden p-4 sm:p-8 origin-center will-change-transform"
     >
       <div className="w-full h-full max-w-7xl mx-auto bg-zinc-950 border border-white/10 p-8 sm:p-16 flex flex-col justify-center shadow-2xl overflow-hidden rounded-[inherit]">
-        <div className="border-l-2 border-lime-400 pl-6 space-y-4">
-          <span className="font-mono text-xs text-lime-400 tracking-widest uppercase">
+        <div className="border-l-2 border-fuchsia-400 pl-6 space-y-4">
+          <span className="font-mono text-xs text-fuchsia-400 tracking-widest uppercase">
             [ 01 // OVERVIEW ]
           </span>
           <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">

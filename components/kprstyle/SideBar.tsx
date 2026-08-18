@@ -61,12 +61,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             {/* Header & Close Button */}
             <div className="relative z-10">
               <div className="flex justify-between items-center pb-6 border-b border-white/10">
-                <div className="text-xs sm:text-sm uppercase tracking-widest text-lime-400 font-bold">
+                <div className="text-xs sm:text-sm uppercase tracking-widest text-fuchsia-400 font-bold">
                   ■ DISCOVER
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 text-2xl sm:text-3xl hover:text-lime-400 transition-colors"
+                  className="p-2 text-2xl sm:text-3xl hover:text-fuchsia-400 transition-colors"
                   aria-label="Close menu"
                 >
                   <FiX />
@@ -86,13 +86,13 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <a
                       href={item.href}
                       onClick={onClose}
-                      className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight group-hover:text-lime-400 transition-colors uppercase leading-none py-1"
+                      className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight group-hover:text-fuchsia-400 transition-colors uppercase leading-none py-1"
                     >
                       <ScrambleText text={item.label} />
                     </a>
 
                     {item.page && (
-                      <span className="text-[10px] sm:text-xs font-bold bg-lime-400 text-black px-1.5 sm:px-2 py-0.5 rounded-sm uppercase tracking-widest">
+                      <span className="text-[10px] sm:text-xs font-bold bg-fuchsia-400 text-black px-1.5 sm:px-2 py-0.5 rounded-sm uppercase tracking-widest">
                         PAGE {item.page}
                       </span>
                     )}
@@ -114,7 +114,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                       href={s.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-lime-400 transition-colors font-bold tracking-wider sm:text-base"
+                      className="hover:text-fuchsia-400 transition-colors font-bold tracking-wider sm:text-base"
                     >
                       <ScrambleText text={s.label} />
                     </a>

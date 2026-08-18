@@ -46,10 +46,10 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-white/10 text-xs sm:text-sm">
           {/* Column 1: Status & Location */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-lime-400 font-bold tracking-widest">
+            <div className="flex items-center gap-2 text-fuchsia-400 font-bold tracking-widest">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-lime-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
               </span>
               AVAILABLE FOR WORK
             </div>
@@ -64,14 +64,14 @@ export const Footer = () => {
             </span>
             <div className="flex flex-col gap-1.5">
               <a
-                href="#project"
-                className="hover:text-lime-400 transition-colors inline-flex items-center gap-1 w-fit"
+                href="/projects"
+                className="hover:text-fuchsia-400 transition-colors inline-flex items-center gap-1 w-fit"
               >
                 PROJECTS <FiArrowUpRight />
               </a>
               <a
                 href="mailto:lukwagojoel@example.com"
-                className="hover:text-lime-400 transition-colors inline-flex items-center gap-1 w-fit"
+                className="hover:text-fuchsia-400 transition-colors inline-flex items-center gap-1 w-fit"
               >
                 GET IN TOUCH <FiArrowUpRight />
               </a>
@@ -90,7 +90,7 @@ export const Footer = () => {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-lime-400 transition-colors font-bold tracking-wider"
+                  className="hover:text-fuchsia-400 transition-colors font-bold tracking-wider"
                 >
                   <ScrambleText text={s.label} />
                 </a>
@@ -109,7 +109,7 @@ export const Footer = () => {
             className="w-full text-center group cursor-pointer select-none"
             onClick={scrollToTop}
           >
-            <h2 className="font-extrabold text-[15vw] sm:text-[17vw] leading-[0.75] tracking-tighter uppercase text-white transition-all duration-500 group-hover:text-lime-400 group-hover:tracking-normal">
+            <h2 className="font-extrabold text-[15vw] sm:text-[17vw] leading-[0.75] tracking-tighter uppercase text-white transition-all duration-500 group-hover:text-fuchsia-400 group-hover:tracking-normal">
               LUKWAGO
             </h2>
             <h2 className="font-extrabold text-[15vw] sm:text-[17vw] leading-[0.75] tracking-tighter uppercase text-transparent stroke-text transition-all duration-500 group-hover:text-white group-hover:tracking-normal">
@@ -126,10 +126,10 @@ export const Footer = () => {
 
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-2 hover:text-lime-400 transition-colors uppercase tracking-widest font-bold group"
+            className="flex items-center gap-2 hover:text-fuchsia-400 transition-colors uppercase tracking-widest font-bold group"
           >
             BACK TO TOP
-            <span className="p-1.5 border border-white/20 rounded-full group-hover:border-lime-400 group-hover:-translate-y-1 transition-all">
+            <span className="p-1.5 border border-white/20 rounded-full group-hover:border-fuchsia-400 group-hover:-translate-y-1 transition-all">
               <FiArrowUp className="text-sm" />
             </span>
           </button>

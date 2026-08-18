@@ -27,8 +27,7 @@ const plex = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lukwagojoel.com"), // change to your domain
-
+  metadataBase: new URL("https://lukwagojoel.com"), 
   title: {
     default: "Lukwago Joel | Software Engineer, Entrepreneur & AI Enthusiast",
     template: "%s | Lukwago Joel",
@@ -38,8 +37,8 @@ export const metadata: Metadata = {
     "Lukwago Joel is a software engineer from Uganda specializing in React, Next.js, React Native, Node.js, TypeScript, AI, and modern web development. Entrepreneur, bodybuilder, and founder building software products.",
 
   keywords: [
-    "Lukwago Joel Jr",
     "Lukwago Joel",
+     "Lukwago Joel Jr",
     "Joel Lukwago",
     "Software Engineer",
     "React",
@@ -97,7 +96,7 @@ export const metadata: Metadata = {
     description:
       "Software engineer from Uganda building web, mobile and AI applications.",
 
-    images: ["/me.jpg"],
+    images: ["/me1.jpg"],
   },
 
   robots: {
