@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiArrowUpRight, FiCheck, FiCopy, FiSend } from "react-icons/fi";
+import { FiArrowUpRight, FiCheck, FiSend } from "react-icons/fi";
 import { ScrambleText } from "../kprstyle/Effects/scrumble";
-
+import { ClippedButton } from "../kprstyle/clippedButton";
+import { SOCIAL_LINKS } from "../../data/Navigation";
 
 interface ContactFormProps {
   email: string;
@@ -12,7 +13,11 @@ interface ContactFormProps {
   formattedPhone: string;
 }
 
-export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) => {
+export const ContactForm = ({
+  email,
+  phone,
+  formattedPhone,
+}: ContactFormProps) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [formState, setFormState] = useState({
     name: "",
@@ -54,40 +59,69 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
             ■ DIRECT CHANNELS
           </h2>
 
-          {/* Email Card */}
-          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 transition-colors">
-            <span className="text-xs text-gray-500 uppercase">PRIMARY EMAIL</span>
+          {/* Email Card (Entire card is clickable to copy) */}
+          <div
+            onClick={() => handleCopy(email, "email")}
+            className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 cursor-pointer transition-colors"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500 uppercase">
+                PRIMARY EMAIL
+              </span>
+              {copiedField === "email" && (
+                <span className="text-[10px] text-fuchsia-400 font-bold tracking-wider flex items-center gap-1 uppercase">
+                  <FiCheck /> COPIED TO CLIPBOARD
+                </span>
+              )}
+            </div>
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm sm:text-base font-bold text-white tracking-wide">
+              <span className="text-sm sm:text-base font-bold text-white group-hover:text-fuchsia-400 transition-colors tracking-wide">
                 {email}
               </span>
-              <button
-                type="button"
-                onClick={() => handleCopy(email, "email")}
-                className="p-2 border border-white/20 hover:border-fuchsia-400 text-gray-400 hover:text-fuchsia-400 transition-colors"
-                aria-label="Copy Email"
-              >
-                {copiedField === "email" ? <FiCheck className="text-fuchsia-400" /> : <FiCopy />}
-              </button>
             </div>
           </div>
 
-          {/* Phone Card */}
-          <div className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 transition-colors">
-            <span className="text-xs text-gray-500 uppercase">PHONE / WHATSAPP</span>
+          {/* Phone Card (Entire card is clickable to copy) */}
+          <div
+            onClick={() => handleCopy(phone, "phone")}
+            className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 cursor-pointer transition-colors"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500 uppercase">
+                PHONE / WHATSAPP
+              </span>
+              {copiedField === "phone" && (
+                <span className="text-[10px] text-fuchsia-400 font-bold tracking-wider flex items-center gap-1 uppercase">
+                  <FiCheck /> COPIED TO CLIPBOARD
+                </span>
+              )}
+            </div>
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm sm:text-base font-bold text-white tracking-wide">
+              <span className="text-sm sm:text-base font-bold text-white group-hover:text-fuchsia-400 transition-colors tracking-wide">
                 {formattedPhone}
               </span>
-              <button
-                type="button"
-                onClick={() => handleCopy(phone, "phone")}
-                className="p-2 border border-white/20 hover:border-fuchsia-400 text-gray-400 hover:text-fuchsia-400 transition-colors"
-                aria-label="Copy Phone"
-              >
-                {copiedField === "phone" ? <FiCheck className="text-fuchsia-400" /> : <FiCopy />}
-              </button>
             </div>
+          </div>
+        </div>
+
+        {/* Social Links Section */}
+        <div className="space-y-4">
+          <h2 className="text-gray-400 text-xs tracking-widest uppercase font-bold">
+            ■ CONNECT & FOLLOW
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {SOCIAL_LINKS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                className="p-4 bg-zinc-950 border border-white/10 hover:border-fuchsia-400/50 transition-colors group flex items-center justify-between text-xs font-bold text-white tracking-wider"
+              >
+                <ScrambleText text={s.label} />
+                <FiArrowUpRight className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-fuchsia-400 transition-all text-gray-500" />
+              </a>
+            ))}
           </div>
         </div>
 
@@ -139,7 +173,9 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   required
                   placeholder="JOHN DOE"
                   value={formState.name}
-                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({ ...formState, name: e.target.value })
+                  }
                   className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
                 />
               </div>
@@ -153,7 +189,9 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   required
                   placeholder="JOHN@EXAMPLE.COM"
                   value={formState.email}
-                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({ ...formState, email: e.target.value })
+                  }
                   className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
                 />
               </div>
@@ -167,27 +205,28 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                   rows={5}
                   placeholder="TELL ME ABOUT YOUR PROJECT GOALS, TIMELINE, AND SCOPE..."
                   value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({ ...formState, message: e.target.value })
+                  }
                   className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors resize-none"
                 />
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-white text-black font-extrabold p-5 uppercase tracking-wider text-sm flex items-center justify-center gap-3 hover:bg-fuchsia-400 transition-colors disabled:opacity-50 group"
-              >
-                {isSubmitting ? (
-                  <span className="animate-pulse flex items-center gap-2">
-                    TRANSMITTING...
-                  </span>
-                ) : (
-                  <>
-                    <ScrambleText text="SEND TRANSMISSION" />
-                    <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </>
-                )}
-              </button>
+              <div className="pt-2">
+                <ClippedButton
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <span className="animate-pulse flex items-center gap-2">
+                      TRANSMITTING...
+                    </span>
+                  ) : (
+                    <>
+                      SEND MESSAGE <FiSend />
+                    </>
+                  )}
+                </ClippedButton>
+              </div>
             </motion.form>
           ) : (
             <motion.div
@@ -212,7 +251,12 @@ export const ContactForm = ({ email, phone, formattedPhone }: ContactFormProps) 
                 type="button"
                 onClick={() => {
                   setIsSubmitted(false);
-                  setFormState({ name: "", email: "", subject: "PROJECT INQUIRY", message: "" });
+                  setFormState({
+                    name: "",
+                    email: "",
+                    subject: "PROJECT INQUIRY",
+                    message: "",
+                  });
                 }}
                 className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-fuchsia-400 hover:text-white transition-colors uppercase pt-4"
               >
