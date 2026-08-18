@@ -2,16 +2,19 @@ import { ScrambleText } from "@/components/kprstyle/Effects/scrumble";
 import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
+import { AboutAnimated } from "@/components/pages/aboutContent";
 
 export const metadata: Metadata = {
   title: "About | Lukwago Joel",
-  description: "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
+  description:
+    "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
     title: "About | Lukwago Joel",
-    description: "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
+    description:
+      "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
     url: "/about",
   },
 };
@@ -58,10 +61,8 @@ export default function AboutPage() {
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="ABOUT ME" />
           </div>
 
-          {/* Placeholder Content */}
-          <div className="py-20 text-gray-400 text-lg">
-            <p>// Content coming soon...</p>
-          </div>
+          {/* Interactive Animated Content Component */}
+          <AboutAnimated/>
         </div>
       </section>
     </>

@@ -5,11 +5,11 @@ export const ABOUT_DATA = [
     items: [
       {
         label: "Full name",
-        value: "Lukwago Joel Jr",
+        value: "Lukwago Joel",
       },
       {
         label: "Also known as",
-        value: ["Lukwago Joel", "Joel Lukwago"],
+        value: ["Lukwago Joel", "Joel Lukwago","Lukwago Joel Jr"],
       },
       {
         label: "Occupation",
