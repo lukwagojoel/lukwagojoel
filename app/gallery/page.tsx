@@ -4,30 +4,25 @@ import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects | Lukwago Joel",
-  description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
+  title: "Gallery | Lukwago Joel",
+  description: "A visual showcase of UI designs, creative development experiments, graphics, and technical snapshots.",
   alternates: {
-    canonical: "/projects",
+    canonical: "/gallery",
   },
   openGraph: {
-    title: "Projects | Lukwago Joel",
-    description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
-    url: "/projects",
+    title: "Gallery | Lukwago Joel",
+    description: "A visual showcase of UI designs, creative development experiments, graphics, and technical snapshots.",
+    url: "/gallery",
   },
 };
 
-export default function ProjectsPage() {
+export default function GalleryPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Lukwago Joel Software Projects",
-    url: "https://lukwagojoel.com/projects",
-    description: "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
-    author: {
-      "@type": "Person",
-      name: "Lukwago Joel",
-      jobTitle: "Full-Stack & Web Application Engineer",
-    },
+    "@type": "ImageGallery",
+    name: "Lukwago Joel Visual Gallery",
+    url: "https://lukwagojoel.com/gallery",
+    description: "Visual portfolio and design archives by Lukwago Joel.",
   };
 
   return (
@@ -49,14 +44,14 @@ export default function ProjectsPage() {
           <div className="space-y-4 pb-12 border-b border-white/10">
             <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
               <FiTerminal className="animate-pulse" />
-              <span>[ 06 // ARCHIVE ]</span>
+              <span>[ 05 // VISUALS ]</span>
             </div>
-            <ScrambleText className="text-6xl md:text-8xl font-bold" text="PROJECTS" />
+            <ScrambleText className="text-6xl md:text-8xl font-bold" text="GALLERY" />
           </div>
 
           {/* Placeholder Content */}
           <div className="py-20 text-gray-400 text-lg">
-            <p>// Selected builds and case studies coming soon...</p>
+            <p>// Visual assets coming soon...</p>
           </div>
         </div>
       </section>

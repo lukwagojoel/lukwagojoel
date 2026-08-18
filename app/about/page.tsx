@@ -4,29 +4,33 @@ import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects | Lukwago Joel",
-  description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
+  title: "About | Lukwago Joel",
+  description: "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
   alternates: {
-    canonical: "/projects",
+    canonical: "/about",
   },
   openGraph: {
-    title: "Projects | Lukwago Joel",
-    description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
-    url: "/projects",
+    title: "About | Lukwago Joel",
+    description: "Learn more about Lukwago Joel, a full-stack & web application engineer specializing in high-performance web applications and design systems.",
+    url: "/about",
   },
 };
 
-export default function ProjectsPage() {
+export default function AboutPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Lukwago Joel Software Projects",
-    url: "https://lukwagojoel.com/projects",
-    description: "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
-    author: {
+    "@type": "AboutPage",
+    name: "About Lukwago Joel",
+    url: "https://lukwagojoel.com/about",
+    mainEntity: {
       "@type": "Person",
       name: "Lukwago Joel",
       jobTitle: "Full-Stack & Web Application Engineer",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Kampala",
+        addressCountry: "UG",
+      },
     },
   };
 
@@ -49,14 +53,14 @@ export default function ProjectsPage() {
           <div className="space-y-4 pb-12 border-b border-white/10">
             <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
               <FiTerminal className="animate-pulse" />
-              <span>[ 06 // ARCHIVE ]</span>
+              <span>[ 01 // PROFILE ]</span>
             </div>
-            <ScrambleText className="text-6xl md:text-8xl font-bold" text="PROJECTS" />
+            <ScrambleText className="text-6xl md:text-8xl font-bold" text="ABOUT ME" />
           </div>
 
           {/* Placeholder Content */}
           <div className="py-20 text-gray-400 text-lg">
-            <p>// Selected builds and case studies coming soon...</p>
+            <p>// Content coming soon...</p>
           </div>
         </div>
       </section>

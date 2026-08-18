@@ -4,30 +4,25 @@ import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects | Lukwago Joel",
-  description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
+  title: "Merch | Lukwago Joel",
+  description: "Official developer apparel, custom tech accessories, and limited edition drops by Lukwago Joel.",
   alternates: {
-    canonical: "/projects",
+    canonical: "/merch",
   },
   openGraph: {
-    title: "Projects | Lukwago Joel",
-    description: "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.",
-    url: "/projects",
+    title: "Merch | Lukwago Joel",
+    description: "Official developer apparel, custom tech accessories, and limited edition drops by Lukwago Joel.",
+    url: "/merch",
   },
 };
 
-export default function ProjectsPage() {
+export default function MerchPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Lukwago Joel Software Projects",
-    url: "https://lukwagojoel.com/projects",
-    description: "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
-    author: {
-      "@type": "Person",
-      name: "Lukwago Joel",
-      jobTitle: "Full-Stack & Web Application Engineer",
-    },
+    name: "Lukwago Joel Merch Store",
+    url: "https://lukwagojoel.com/merch",
+    description: "Official apparel and tech accessories collection.",
   };
 
   return (
@@ -49,14 +44,14 @@ export default function ProjectsPage() {
           <div className="space-y-4 pb-12 border-b border-white/10">
             <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
               <FiTerminal className="animate-pulse" />
-              <span>[ 06 // ARCHIVE ]</span>
+              <span>[ 03 // APPAREL ]</span>
             </div>
-            <ScrambleText className="text-6xl md:text-8xl font-bold" text="PROJECTS" />
+            <ScrambleText className="text-6xl md:text-8xl font-bold" text="MERCH STORE" />
           </div>
 
           {/* Placeholder Content */}
           <div className="py-20 text-gray-400 text-lg">
-            <p>// Selected builds and case studies coming soon...</p>
+            <p>// Store drops coming soon...</p>
           </div>
         </div>
       </section>

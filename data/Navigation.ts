@@ -6,8 +6,8 @@ export const NAV_LINKS = [
 
 export const SIDEBAR_LINKS = [
   { 
-    label: "STORY", 
-    href: "#story", 
+    label: "ABOUT", 
+    href: "/about", 
     page: "001",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80" 
   },
@@ -16,11 +16,11 @@ export const SIDEBAR_LINKS = [
     href: "/projects",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80" 
   },
-  { 
-    label: "CLIENTEL", 
-    href: "/clientel",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80" 
-  },
+  // { 
+  //   label: "CLIENTEL", 
+  //   href: "/clientel",
+  //   image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80" 
+  // },
   { 
     label: "PODCAST", 
     href: "/podcast",
