@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  const email = "contact@lukwagojoel.com";
+  const email = "me@lukwagojoel.com";
   const phone = "+256706754002";
   const formattedPhone = "+256 706 754 002";
 
@@ -38,7 +38,7 @@ export default function ContactPage() {
       name: "Lukwago Joel",
       email: email,
       telephone: phone,
-      jobTitle: "Full-Stack & Web Application Engineer",
+      jobTitle: "Software Engineer & Entrepreneur",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Kampala",
