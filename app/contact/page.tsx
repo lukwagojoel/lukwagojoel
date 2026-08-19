@@ -3,6 +3,7 @@ import { ContactForm } from "@/components/pages/contactContent";
 import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
+import { jobTitle } from "@/data/meta";
 
 export const metadata: Metadata = {
   // If your layout.tsx has a title template (e.g., template: "%s | Lukwago Joel"), 
@@ -38,7 +39,7 @@ export default function ContactPage() {
       name: "Lukwago Joel",
       email: email,
       telephone: phone,
-      jobTitle: "Software Engineer & Entrepreneur",
+      jobTitle: jobTitle,
       address: {
         "@type": "PostalAddress",
         addressLocality: "Kampala",

@@ -3,6 +3,7 @@ import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
 import { AboutAnimated } from "@/components/pages/aboutContent";
+import { jobTitle } from "@/data/meta";
 
 export const metadata: Metadata = {
   title: "About | Lukwago Joel",
@@ -28,7 +29,7 @@ export default function AboutPage() {
     mainEntity: {
       "@type": "Person",
       name: "Lukwago Joel",
-      jobTitle: "Full-Stack & Web Application Engineer",
+     jobTitle: jobTitle,
       address: {
         "@type": "PostalAddress",
         addressLocality: "Kampala",

@@ -5,13 +5,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Podcast | Lukwago Joel",
-  description: "Discussions on modern software development, web application engineering, UI/UX design, and tech culture.",
+   description: "Conversations on God, life, & Relationships",
   alternates: {
     canonical: "/podcast",
   },
   openGraph: {
     title: "Podcast | Lukwago Joel",
-    description: "Discussions on modern software development, web application engineering, UI/UX design, and tech culture.",
+     description: "Conversations on God, life, & Relationships",
     url: "/podcast",
   },
 };
@@ -20,9 +20,9 @@ export default function PodcastPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "PodcastSeries",
-    name: "Lukwago Joel Podcast",
+    name: "Lukwago Joel Podcasts",
     url: "https://lukwagojoel.com/podcast",
-    description: "Conversations on full-stack architecture, design, and software engineering.",
+    description: "Conversations on God, life, & Relationships",
     author: {
       "@type": "Person",
       name: "Lukwago Joel",
