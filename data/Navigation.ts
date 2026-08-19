@@ -27,7 +27,7 @@ export const SIDEBAR_LINKS = [
     label: "GALLERY", 
    
     href: "/gallery",
-    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=1000&q=80" 
+    image: "https://images.pexels.com/photos/1196827/pexels-photo-1196827.jpeg" 
   },
   { 
     label: "MERCH", 

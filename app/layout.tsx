@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, IBM_Plex_Mono,JetBrains_Mono } from "next/font/google";
+import {  Inter,Quicksand, Montserrat } from "next/font/google";
 import "./globals.css";
 import {personJsonLd} from "../components/identity";
-import CustomCursor from "@/components/cusor";
 import { Header } from "@/components/kprstyle/Header";
 import { Footer } from "@/components/kprstyle/Footer";
 import { SmoothScroll } from "@/components/kprstyle/Effects/smoothScroll";
 
 
-const plex = IBM_Plex_Mono({
+
+const montserrat = Montserrat({
   weight: ["400", "500"],
   subsets: ["latin"],
-  variable: "--plex",
+  variable: "--font-montserrat",
   display: "swap",
 });
-
+const quicksand = Quicksand({
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  variable: "--font-quicksand",
+  display: "swap",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,11 +27,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lukwagojoel.com"), 
@@ -121,7 +122,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} ${inter.variable} ${plex.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${inter.variable}`}>
       <body className="font-body bg-carbon text-bone antialiased">
         <SmoothScroll>
         <script
