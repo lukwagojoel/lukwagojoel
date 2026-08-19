@@ -9,7 +9,7 @@ export const SIDEBAR_LINKS = [
     label: "ABOUT", 
     href: "/about", 
     page: "001",
-    image: "/https://images.pexels.com/photos/16767121/pexels-photo-16767121.jpeg" 
+    image: "/https://images.pexels.com/photos/36026444/pexels-photo-36026444.jpeg?auto=format&fit=crop&w=1000&q=80" 
   },
   { 
     label: "PROJECTS", 
