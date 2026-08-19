@@ -49,7 +49,7 @@ export default function ProjectsPage() {
           <div className="space-y-4 pb-12 border-b border-white/10">
             <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
               <FiTerminal className="animate-pulse" />
-              <span>[ 06 // ARCHIVE ]</span>
+              <span>[ 02 // ARCHIVE ]</span>
             </div>
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="PROJECTS" />
           </div>

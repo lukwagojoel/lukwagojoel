@@ -44,7 +44,7 @@ export default function MerchPage() {
           <div className="space-y-4 pb-12 border-b border-white/10">
             <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-widest uppercase">
               <FiTerminal className="animate-pulse" />
-              <span>[ 03 // APPAREL ]</span>
+              <span>[ 05 // APPAREL ]</span>
             </div>
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="MERCH STORE" />
           </div>

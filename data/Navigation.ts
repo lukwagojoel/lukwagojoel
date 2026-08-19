@@ -9,27 +9,31 @@ export const SIDEBAR_LINKS = [
     label: "ABOUT", 
     href: "/about", 
     page: "001",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80" 
+    image: "/https://images.pexels.com/photos/16767121/pexels-photo-16767121.jpeg" 
   },
   { 
     label: "PROJECTS", 
+   
     href: "/projects",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80" 
   },
   { 
     label: "PODCAST", 
+   
     href: "/podcast",
-    image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1000&q=80" 
+    image: "/podcast.jpg" 
   },
   { 
     label: "GALLERY", 
+   
     href: "/gallery",
     image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=1000&q=80" 
   },
   { 
     label: "MERCH", 
+    
     href: "/merch",
-    image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1000&q=80" 
+    image: "https://images.pexels.com/photos/37420545/pexels-photo-37420545.jpeg?auto=format&fit=crop&w=1000&q=80" 
   },
 ];
 export const SOCIAL_LINKS = [
