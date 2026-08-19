@@ -7,12 +7,16 @@ interface ClippedButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export const ClippedButton = ({
   children,
   onClick,
   className = "",
+  type = "button",
+  disabled = false,
 }: ClippedButtonProps) => {
   // Polygon coordinates: (0 0) -> (82% 0) -> (100% 35%) -> (100% 100%) -> (18% 100%) -> (0 65%)
   const clipPolygon =
@@ -29,8 +33,10 @@ export const ClippedButton = ({
       {/* 2. MAIN FRONT BUTTON */}
       <button
         onClick={onClick}
+        type={type}
+        disabled={disabled}
         style={{ clipPath: clipPolygon }}
-        className={`relative z-10 block px-8 py-4 font-extrabold text-sm tracking-widest uppercase text-black bg-white transition-all duration-300 ease-out border-2 border-gray-300 group-hover:text-white ${className}`}
+        className={`relative z-10 block px-8 py-4 font-extrabold text-sm tracking-widest uppercase text-black bg-white transition-all duration-300 ease-out border-2 border-gray-300 group-hover:text-white disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
       >
         {/* Continuous Endless Moving Border (Fuchsia Accent) */}
         <svg

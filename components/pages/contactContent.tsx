@@ -34,15 +34,33 @@ export const ContactForm = ({
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Simulate transmission delay
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to send your message right now.");
+      }
+
       setIsSubmitted(true);
-    }, 1500);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Unable to send your message right now.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -214,6 +232,8 @@ export const ContactForm = ({
 
               <div className="pt-2">
                 <ClippedButton
+                  type="submit"
+                  disabled={isSubmitting}
                   className="w-full flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
@@ -227,6 +247,11 @@ export const ContactForm = ({
                   )}
                 </ClippedButton>
               </div>
+              {submitError && (
+                <p role="alert" className="text-sm text-red-400">
+                  {submitError}
+                </p>
+              )}
             </motion.form>
           ) : (
             <motion.div
