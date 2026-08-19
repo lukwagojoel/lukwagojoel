@@ -1,7 +1,7 @@
 export const NAV_LINKS = [
   { label: "ABOUT", href: "/about" },
   { label: "PROJECTS", href: "/projects" },
-  { label: "JOURNAL", href: "/journal" },
+  { label: "PODCAST", href: "/podcast" },
 ];
 
 export const SIDEBAR_LINKS = [
@@ -16,11 +16,6 @@ export const SIDEBAR_LINKS = [
     href: "/projects",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80" 
   },
-  // { 
-  //   label: "CLIENTEL", 
-  //   href: "/clientel",
-  //   image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80" 
-  // },
   { 
     label: "PODCAST", 
     href: "/podcast",
