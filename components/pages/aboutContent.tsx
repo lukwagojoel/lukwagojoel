@@ -54,11 +54,11 @@ export const AboutAnimated = () => {
         <div className="relative rounded-xl overflow-hidden border border-white/15 bg-neutral-900/50 backdrop-blur-md p-4 space-y-4 shadow-2xl">
           <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden border border-white/10 group-hover:border-fuchsia-400/50 transition-colors">
             <Image
-              src="/me24.jpg"
-              alt="Lukwago Joel Jr"
+              src="/me.jpg"
+              alt="Lukwago Joel"
               fill
               priority
-              className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+              className="object-cover object-center  transition-all duration-700 scale-105 group-hover:scale-100"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
             <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md border border-emerald-500/40 px-2.5 py-1 rounded text-[10px] font-bold text-emerald-400 flex items-center gap-1.5">
@@ -68,7 +68,7 @@ export const AboutAnimated = () => {
           </div>
 
           <div className="space-y-2 pt-2">
-            <h3 className="text-xl font-bold text-white tracking-tight">LUKWAGO JOEL JR</h3>
+            <h3 className="text-xl font-bold text-white tracking-tight">LUKWAGO JOEL</h3>
             <p className="text-xs text-fuchsia-400 tracking-wider uppercase">
               Software Engineer & Entrepreneur
             </p>
