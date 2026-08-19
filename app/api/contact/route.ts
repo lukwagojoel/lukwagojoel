@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: "Website Contact <onboarding@resend.dev>",
+      from: "Website Contact <me@lukwagojoel.com>",
       to: [recipient],
       replyTo: email,
       subject: `[${subject || "PROJECT INQUIRY"}] ${name}`,
