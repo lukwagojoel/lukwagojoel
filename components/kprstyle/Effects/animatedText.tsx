@@ -17,11 +17,11 @@ interface AnimatedTextProps {
 }
 
 const unitVariants: Variants = {
-  hidden: { opacity: 0, y: "0.4em" },
+  hidden: { opacity: 0, filter: "blur(6px)" },
   show: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -38,10 +38,9 @@ export function AnimatedText({
   as = "span",
   once = false,
 }: AnimatedTextProps) {
-  const effectiveMode: "chars" | "words" =
-    mode === "chars" && text.length > 220 ? "words" : mode;
+  const effectiveMode: "chars" | "words" = mode;
 
-  const staggerChildren = effectiveMode === "chars" ? 0.018 : 0.045;
+  const staggerChildren = effectiveMode === "chars" ? 0.055 : 0.09;
 
   const containerVariants: Variants = {
     hidden: {},

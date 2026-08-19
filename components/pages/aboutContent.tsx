@@ -12,7 +12,7 @@ const renderValue = (value: string | string[]) => {
   if (Array.isArray(value)) {
     return (
       <p className="mt-1 text-sm text-gray-300 leading-relaxed">
-        {value.join(" · ")}
+        <AnimatedText text={value.join(" · ")} mode="chars" once={false} />
       </p>
     );
   }
@@ -25,13 +25,21 @@ const renderValue = (value: string | string[]) => {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1 text-sm text-gray-200 underline decoration-gray-600 underline-offset-4 transition-colors hover:text-white hover:decoration-white"
       >
-        <span>{value.replace(/^https?:\/\/(www\.)?/, "")}</span>
+        <AnimatedText
+          text={value.replace(/^https?:\/\/(www\.)?/, "")}
+          mode="chars"
+          once={false}
+        />
         <FiExternalLink className="text-xs" />
       </Link>
     );
   }
 
-  return <p className="text-sm text-gray-300 leading-relaxed">{value}</p>;
+  return (
+    <p className="text-sm text-gray-300 leading-relaxed">
+      <AnimatedText text={value} mode="chars" once={false} />
+    </p>
+  );
 };
 
 export const AboutAnimated = () => {
@@ -53,7 +61,7 @@ export const AboutAnimated = () => {
         <div className="mt-4 max-w-2xl font-serif text-lg text-gray-300 leading-relaxed">
           <AnimatedText
             text="Engineering practical software systems, modern web platforms, and AI tools — with the same discipline I bring to the gym, applied to the craft."
-            mode="words"
+            mode="chars"
             once={false}
           />
         </div>
@@ -93,7 +101,7 @@ export const AboutAnimated = () => {
                 className="border-b border-white/5 py-8 first:pt-8"
               >
                 <h3 className="font-serif text-xl text-white">
-                  <AnimatedText text={block.title} mode="words" />
+                  <AnimatedText text={block.title} mode="chars" once={false} />
                 </h3>
 
                 <div className="mt-5 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
@@ -107,7 +115,7 @@ export const AboutAnimated = () => {
                       }
                     >
                       <span className="block text-xs uppercase tracking-wider text-gray-500">
-                        {item.label}
+                        <AnimatedText text={item.label} mode="chars" once={false} />
                       </span>
                       <div className="mt-1">{renderValue(item.value)}</div>
                     </div>
@@ -135,18 +143,38 @@ export const AboutAnimated = () => {
 
             <div className="space-y-3 p-4">
               <div>
-                <h3 className="text-base font-semibold text-white">Lukwago Joel</h3>
-                <p className="text-xs text-gray-500">Software Engineer &amp; Entrepreneur</p>
+                <h3 className="text-base font-semibold text-white">
+                  <AnimatedText text="Lukwago Joel" mode="chars" once={false} />
+                </h3>
+                <p className="text-xs text-gray-500">
+                  <AnimatedText
+                    text="Software Engineer & Entrepreneur"
+                    mode="chars"
+                    once={false}
+                  />
+                </p>
               </div>
 
               <dl className="space-y-2 border-t border-white/10 pt-3 text-xs">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-gray-500">Based in</dt>
-                  <dd className="text-right text-gray-300">Kampala, Uganda</dd>
+                  <dt className="text-gray-500">
+                    <AnimatedText text="Based in" mode="chars" once={false} />
+                  </dt>
+                  <dd className="text-right text-gray-300">
+                    <AnimatedText text="Kampala, Uganda" mode="chars" once={false} />
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-gray-500">Focus</dt>
-                  <dd className="text-right text-gray-300">Web &amp; mobile engineering</dd>
+                  <dt className="text-gray-500">
+                    <AnimatedText text="Focus" mode="chars" once={false} />
+                  </dt>
+                  <dd className="text-right text-gray-300">
+                    <AnimatedText
+                      text="Web & mobile engineering"
+                      mode="chars"
+                      once={false}
+                    />
+                  </dd>
                 </div>
               </dl>
             </div>

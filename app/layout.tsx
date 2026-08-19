@@ -1,28 +1,30 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Bebas_Neue, Inter, IBM_Plex_Mono,JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import {personJsonLd} from "../components/identity";
 import CustomCursor from "@/components/cusor";
 import { Header } from "@/components/kprstyle/Header";
 import { Footer } from "@/components/kprstyle/Footer";
+import { SmoothScroll } from "@/components/kprstyle/Effects/smoothScroll";
 
-const bebas = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--bebas",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--inter",
-  display: "swap",
-});
 
 const plex = IBM_Plex_Mono({
   weight: ["400", "500"],
   subsets: ["latin"],
   variable: "--plex",
+  display: "swap",
+});
+
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -119,8 +121,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${bebas.variable} ${inter.variable} ${plex.variable}`}>
+    <html lang="en" className={`${jetbrainsMono.variable} ${inter.variable} ${plex.variable} ${jetbrainsMono.variable}`}>
       <body className="font-body bg-carbon text-bone antialiased">
+        <SmoothScroll>
         <script
   type="application/ld+json"
   dangerouslySetInnerHTML={{
@@ -131,7 +134,7 @@ export default function RootLayout({
         <Header/>
         {children}
         <Footer/>
-        
+        </SmoothScroll>
       </body>
     </html>
   );
