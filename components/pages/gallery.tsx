@@ -26,8 +26,8 @@ export interface GalleryItem {
 // whenever you have them. Categories pulled from your page's own metadata
 // description: UI, Experiments, Graphics, Snapshots.
 export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: "g1", src: "https://picsum.photos/seed/joel-ui-1/900/900", title: "Dashboard Concept", category: "UI", size: "lg" },
-  { id: "g2", src: "https://picsum.photos/seed/joel-snap-1/600/600", title: "Studio Setup", category: "Snapshots", size: "sm" },
+  { id: "g1", src: "/me24.jpg", title: "Dashboard Concept", category: "UI", size: "lg" },
+  { id: "g2", src: "/me25.jpg", title: "Studio Setup", category: "Snapshots", size: "sm" },
   { id: "g3", src: "https://picsum.photos/seed/joel-gfx-1/600/600", title: "Type Study", category: "Graphics", size: "sm" },
   { id: "g4", src: "https://picsum.photos/seed/joel-exp-1/600/1200", title: "Shader Test", category: "Experiments", size: "tall" },
   { id: "g5", src: "https://picsum.photos/seed/joel-ui-2/1200/600", title: "Mobile Flow", category: "UI", size: "wide" },
