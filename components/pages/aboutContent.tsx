@@ -60,7 +60,7 @@ export const AboutAnimated = () => {
 
         <div className="mt-4 max-w-2xl font-serif text-lg text-gray-300 leading-relaxed">
           <AnimatedText
-            text="Engineering practical software systems, modern web platforms, and AI tools — with the same discipline I bring to the gym, applied to the craft."
+            text="Engineering practical software systems, modern web platforms, and AI tools that solve real-world problems."
             mode="chars"
             once={false}
           />

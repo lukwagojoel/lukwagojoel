@@ -50,10 +50,10 @@ export const ABOUT_DATA = [
     section: "education",
     title: "Education",
     items: [
-      {
-        label: "Diploma",
-        value: "Diploma in Information Technology for Science",
-      },
+      // {
+      //   label: "Diploma",
+      //   value: "Diploma in Information Technology for Science",
+      // },
       {
         label: "Institution",
         value: "Uganda Institute of Information and Communications Technology (UICT)",
@@ -99,6 +99,16 @@ export const ABOUT_DATA = [
           "Express.js",
           "Tailwind CSS",
           "REST APIs",
+          "firebase",
+          "MongoDB",
+          "PostgreSQL",
+          "superbase",
+          "Docker",
+          "Git",
+          "cloudinary",
+          "Vercel",
+          "Netlify",
+          "AWS",
         ],
       },
     ],
@@ -175,15 +185,21 @@ export const ABOUT_DATA = [
           "A software platform focused on solutions for microfinance businesses.",
       },
       {
-        label: "Imani Vet Solutions",
-        value:
-          "A veterinary and agricultural technology platform combining veterinary services, marketplace features, consultations, training, and other digital services.",
-      },
-      {
         label: "Prizmux",
         value:
           "A developer ecosystem focused on tools, components, CLI utilities, and software development workflows.",
       },
+      {
+        label: "Holy Battle Front",
+        value:
+          "A Christian mobile game to engage users in spiritual growth and biblical knowledge through interactive gameplay.",
+      },
+      {
+        label: "Belivers Hall",
+        value:
+          "A Christian social media platform for believers to connect, share, and grow in their faith.",
+      },
+
     ],
   },
 
