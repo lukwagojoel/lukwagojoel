@@ -2,6 +2,7 @@ import { ScrambleText } from "@/components/kprstyle/Effects/scrumble";
 import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
+import { Gallery } from "@/components/pages/gallery";
 
 export const metadata: Metadata = {
   title: "Gallery | Lukwago Joel",
@@ -49,9 +50,9 @@ export default function GalleryPage() {
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="GALLERY" />
           </div>
 
-          {/* Placeholder Content */}
-          <div className="py-20 text-gray-400 text-lg">
-            <p>// Visual assets coming soon...</p>
+          {/* Gallery Content */}
+          <div className="py-20">
+            <Gallery />
           </div>
         </div>
       </section>

@@ -2,16 +2,17 @@ import { ScrambleText } from "@/components/kprstyle/Effects/scrumble";
 import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
+import { PodcastList } from "@/components/pages/podcast";
 
 export const metadata: Metadata = {
   title: "Podcast | Lukwago Joel",
-   description: "Conversations on God, life, & Relationships",
+  description: "Conversations on God, life, & Relationships",
   alternates: {
     canonical: "/podcast",
   },
   openGraph: {
     title: "Podcast | Lukwago Joel",
-     description: "Conversations on God, life, & Relationships",
+    description: "Conversations on God, life, & Relationships",
     url: "/podcast",
   },
 };
@@ -53,9 +54,9 @@ export default function PodcastPage() {
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="THE PODCAST" />
           </div>
 
-          {/* Placeholder Content */}
-          <div className="py-20 text-gray-400 text-lg">
-            <p>// Episodes coming soon...</p>
+          {/* Podcast Content */}
+          <div className="py-20">
+            <PodcastList />
           </div>
         </div>
       </section>
