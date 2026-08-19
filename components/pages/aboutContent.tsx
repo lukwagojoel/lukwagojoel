@@ -133,7 +133,7 @@ export const AboutAnimated = () => {
           <div className="border border-white/15 bg-white/[0.02]">
             <div className="relative aspect-[4/5] w-full">
               <Image
-                src="/me.jpg"
+                src="/me25.jpg"
                 alt="Lukwago Joel"
                 fill
                 priority
