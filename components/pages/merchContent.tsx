@@ -18,10 +18,10 @@ export interface MerchItem {
 export const MERCH_ITEMS: MerchItem[] = [
   { id: "m1", name: "Bytecode Tee", price: "$32", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-1/700/900" },
   { id: "m2", name: "Terminal Hoodie", price: "$68", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-2/700/900" },
-  { id: "m3", name: "Debug Cap", price: "$24", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-3/700/900" },
-  { id: "m4", name: "Sticker Pack Vol. 1", price: "$8", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-4/700/900" },
-  { id: "m5", name: "200 OK Mug", price: "$18", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-5/700/900" },
-  { id: "m6", name: "Kampala Dev Tee", price: "$32", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-6/700/900" },
+//   { id: "m3", name: "Debug Cap", price: "$24", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-3/700/900" },
+//   { id: "m4", name: "Sticker Pack Vol. 1", price: "$8", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-4/700/900" },
+//   { id: "m5", name: "200 OK Mug", price: "$18", category: "Accessories", image: "https://picsum.photos/seed/joel-merch-5/700/900" },
+//   { id: "m6", name: "Kampala Dev Tee", price: "$32", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-6/700/900" },
 ];
 
 function NotifyForm() {
