@@ -41,6 +41,8 @@ export const ABOUT_DATA = [
           "Software",
           "Entrepreneurship",
           "Bodybuilding",
+          "Fashion",
+          "Gaming"
         ],
       },
     ],
