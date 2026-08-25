@@ -2,6 +2,7 @@ import { ScrambleText } from "@/components/kprstyle/Effects/scrumble";
 import React from "react";
 import { FiTerminal } from "react-icons/fi";
 import type { Metadata } from "next";
+import { MerchStore } from "@/components/pages/merchContent";
 
 export const metadata: Metadata = {
   title: "Merch | Lukwago Joel",
@@ -49,9 +50,9 @@ export default function MerchPage() {
             <ScrambleText className="text-6xl md:text-8xl font-bold" text="MERCH STORE" />
           </div>
 
-          {/* Placeholder Content */}
-          <div className="py-20 text-gray-400 text-lg">
-            <p>// Store drops coming soon...</p>
+          {/* Store Content */}
+          <div className="py-20">
+            <MerchStore />
           </div>
         </div>
       </section>
