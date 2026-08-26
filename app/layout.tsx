@@ -94,7 +94,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "Lukwago Joel | Software Engineer, Entrepreneur & AI Enthusiast",
+      "Lukwago Joel | Software Engineer, Entrepreneur",
 
     description:
       "Software engineer from Uganda building web, mobile and AI applications.",

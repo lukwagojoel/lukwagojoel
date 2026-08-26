@@ -41,6 +41,7 @@ export const personJsonLd = {
   ],
 
   sameAs: [
+    "https://www.wikidata.org/wiki/Q141176121",
     "https://github.com/lukwagojoel",
     "https://linkedin.com/in/lukwago-joel-933822221",
     "https://tiktok.com/@lukwago_joel",
