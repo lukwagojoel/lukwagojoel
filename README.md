@@ -4,12 +4,11 @@ I am a **Software Engineer**, **Entrepreneur**, and **Fashion Stylist** based in
 
 ---
 
-### 🚀 What I'm Building
-* **[Prizmux](https://github.com)** - A comprehensive developer ecosystem focused on production-ready tools, components, CLI utilities, and software development workflows.
-* **Microsolvant** - A dedicated software platform engineering robust, automated solutions for microfinance institutions and businesses.
-* **Holy Battle Front & Belivers Hall** - Specialized interactive mobile and social applications engineered for community building and engagement.
+### 🚀 What I'm Building & Maintaining
+* **[Microsolvant](https://www.microsolvant.com/)** - My flagship, live cloud-based loan management platform for MFIs, SACCOs, and lenders in Kampala, transforming operations from paper to digital.
+* **[Prizmux](https://github.com)** - A comprehensive developer ecosystem focusing on production-ready tools, components, and CLI utilities.
+* **Holy Battle Front & Belivers Hall** - Specialized interactive mobile and social platforms for community engagement.
 
----
 
 ### 💻 Core Tech Stack & Tools
 * **Languages:** JavaScript, TypeScript
@@ -34,4 +33,4 @@ When I'm not designing software architecture or writing code, I channel my dedic
 * **Media & Updates:** [TikTok](https://tiktok.com) | [YouTube](https://youtube.com)
 
 ---
-*“Three disciplines, one standard.”*
+*“Life is a gift from God"”*
