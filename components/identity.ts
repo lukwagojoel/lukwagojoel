@@ -14,9 +14,22 @@ export const personJsonLd = {
   image: "https://lukwagojoel.com/me1.jpg",
 
   jobTitle: "Software Engineer",
+   "founderOf": [
+    {
+      "@type": "Organization",
+      "name": "Microsolvant",
+      "url": "https://microsolvant.com",
+      "description": "A cloud-based loan management platform designed for microfinance institutions, SACCOs, and financial businesses to securely digitize records and automate workflows.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kampala",
+        "addressCountry": "Uganda"
+      }
+    }
+  ],
 
   description:
-    "Software engineer, entrepreneur, AI enthusiast and bodybuilder from Uganda.",
+    "Software engineer, entrepreneur, AI enthusiast from Uganda.",
 
   nationality: "Ugandan",
 

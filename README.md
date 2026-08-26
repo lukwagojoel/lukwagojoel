@@ -4,8 +4,9 @@ I am a **Software Engineer**, **Entrepreneur**, and **Fashion Stylist** based in
 
 ---
 
-### 🚀 What I'm Building & Maintaining
-* **[Microsolvant](https://www.microsolvant.com/)** - My flagship, live cloud-based loan management platform for MFIs, SACCOs, and lenders in Kampala, transforming operations from paper to digital.
+### 🚀 What I'm Founding & Maintaining
+* **[Microsolvant](https://microsolvant.com)** — **Founder & Lead Engineer.** A live, cloud-based loan management platform engineered for microfinance institutions, SACCOs, and money lenders. It digitizes financial operations, moving businesses away from paperwork into secure, automated cloud infrastructure.
+
 * **[Prizmux](https://github.com)** - A comprehensive developer ecosystem focusing on production-ready tools, components, and CLI utilities.
 * **Holy Battle Front & Belivers Hall** - Specialized interactive mobile and social platforms for community engagement.
 
