@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { Plus_Jakarta, playwrite } from "@/lib/fonts";
+
 type NavLink = {
   label: string;
   href: string;
@@ -91,12 +93,11 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
           {/* Header */}
           <div className="flex shrink-0 items-center justify-between">
             <Link
-              href="/"
-              onClick={close}
-              className="text-base font-semibold tracking-tight text-black"
-            >
-              Lukwago Joel
-            </Link>
+          href="/"
+          className={`${playwrite.className} py-4 min-w-0 truncate text-base font-black leading-none text-black sm:text-2xl md:text-center`}
+        >
+          Lukwago Joel
+        </Link>
 
             <button
               type="button"
