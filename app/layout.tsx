@@ -122,7 +122,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${inter.variable}`}>
-      <body className="font-body bg-carbon text-bone antialiased">
+      <body className="font-body bg-white text-black antialiased">
         
         <script
   type="application/ld+json"
