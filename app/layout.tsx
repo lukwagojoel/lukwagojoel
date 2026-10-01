@@ -1,31 +1,18 @@
 import type { Metadata } from "next";
-import {  Inter,Quicksand, Montserrat } from "next/font/google";
+import {  Plus_Jakarta_Sans} from "next/font/google";
 import "./globals.css";
 import {personJsonLd} from "../components/identity";
 import { Header } from "@/components/navigation/Header";
-import { Footer } from "@/components/Footer";
+import { Footer } from "@/components/navigation/Footer";
 
 
 
-const montserrat = Montserrat({
+const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["400", "500"],
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
-const quicksand = Quicksand({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-quicksand",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 
 
 export const metadata: Metadata = {
@@ -121,7 +108,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${inter.variable}`}>
+    <html lang="en" className={`${plusJakartaSans.variable} ${plusJakartaSans.className}`}>
       <body className="font-body bg-white text-black antialiased">
         
         <script

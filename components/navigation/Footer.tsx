@@ -1,17 +1,19 @@
 import { NAV_LINKS, SOCIAL_LINKS } from "@/data/Navigation";
 import Link from "next/link";
+import { Plus_Jakarta, playwrite } from "@/lib/fonts";
 
+const linkClass = `${Plus_Jakarta.className} text-sm leading-none text-black/60 transition-colors hover:text-black`;
 
 export function Footer() {
   return (
-    <footer className="border-t border-black/10 bg-white">
+    <footer className={`${Plus_Jakarta.className} border-t border-black/10 bg-white`}>
       <div className="mx-auto max-w-5xl px-5 py-14">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="text-[15px] font-semibold tracking-tight text-black">
+            <p className={`${playwrite.className} font-black text-xl leading-none text-black`}>
               Lukwago Joel
             </p>
-            <p className="mt-2 text-sm text-black/60">Kampala, Uganda</p>
+            <p className="mt-3 text-sm text-black/60">Kampala, Uganda</p>
             <p className="mt-4 inline-flex items-center gap-2 text-sm text-black">
               <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
               Available for work
@@ -23,10 +25,7 @@ export function Footer() {
             <ul className="mt-3 space-y-2">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-black/60 transition-colors hover:text-black"
-                  >
+                  <Link href={link.href} className={linkClass}>
                     {link.label}
                   </Link>
                 </li>
@@ -34,7 +33,7 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:lukwagojoel@example.com"
-                  className="text-sm text-black/60 transition-colors hover:text-black"
+                  className={linkClass}
                 >
                   Email me
                 </a>
@@ -51,7 +50,7 @@ export function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-black/60 transition-colors hover:text-black"
+                    className={linkClass}
                   >
                     {s.label}
                   </a>

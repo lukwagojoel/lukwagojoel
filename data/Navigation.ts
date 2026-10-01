@@ -1,9 +1,9 @@
 export const NAV_LINKS = [
-  { label: "ABOUT", href: "/about" },
-  { label: "PROJECTS", href: "/projects" },
-  { label: "PODCAST", href: "/podcast" },
-  { label: "GALLERY", href: "/gallery" },
-  { label: "MERCH", href: "/merch" },
+  { label: "About", href: "/about" },
+  { label: "Projects", href: "/projects" },
+  { label: "Podcast", href: "/podcast" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Merch", href: "/merch" },
 ];
 
 export const SIDEBAR_LINKS = [
