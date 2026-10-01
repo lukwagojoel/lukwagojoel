@@ -96,6 +96,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
                 src={item.src}
                 alt={`${item.title} (${item.category})`}
                 fill
+                quality={90}
                 sizes={TILE_SIZES[item.size]}
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
@@ -132,6 +133,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
               src={active.src}
               alt={`${active.title} (${active.category})`}
               fill
+              quality={90}
               sizes="(min-width: 768px) 768px, 90vw"
               className="object-contain"
             />

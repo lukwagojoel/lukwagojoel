@@ -83,6 +83,7 @@ export default function AboutPage() {
                   src="/me25.jpg"
                   alt="Portrait of Lukwago Joel"
                   fill
+                  quality={90}
                   priority
                   sizes="(min-width: 1024px) 280px, 100vw"
                   className="object-cover object-center"

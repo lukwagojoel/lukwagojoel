@@ -73,7 +73,7 @@ export default async function ProjectsPage() {
           Web and mobile products I&apos;ve built for clients and for myself.
         </p>
 
-        <ul className="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, i) => {
             const href = hrefOf(project);
             const summary = project.description;
@@ -86,6 +86,7 @@ export default async function ProjectsPage() {
                       src={project.image}
                       alt={`${project.name} screenshot`}
                       fill
+                      quality={90}
                       sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 100vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
@@ -95,11 +96,11 @@ export default async function ProjectsPage() {
                     </div>
                   )}
                 </div>
-                <h2 className="mt-3 text-[17px] font-medium text-black">
+                <h2 className="mt-3 break-words text-[17px] font-medium text-black">
                   {project.name}
                 </h2>
                 {summary && (
-                  <p className="mt-1 text-sm leading-relaxed text-black/60">
+                  <p title={summary} className="mt-1 truncate text-sm leading-relaxed text-black/60">
                     {summary}
                   </p>
                 )}
@@ -107,7 +108,7 @@ export default async function ProjectsPage() {
             );
 
             return (
-              <li key={project.id ?? i}>
+              <li key={project.id ?? i} className="min-w-0">
                 {href ? (
                   <a
                     href={href}

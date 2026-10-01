@@ -84,6 +84,7 @@ export default function PodcastPage() {
                     src={podcast.cover}
                     alt={`${podcast.title} cover art`}
                     fill
+                    quality={90}
                     priority
                     sizes="(min-width: 640px) 220px, 100vw"
                     className="object-cover"

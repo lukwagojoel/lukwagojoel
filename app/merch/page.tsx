@@ -27,8 +27,8 @@ interface MerchItem {
 
 // Placeholder products and images. Swap for the real drop when it's ready.
 const MERCH_ITEMS: MerchItem[] = [
-  { id: "m1", name: "Bytecode Tee", price: "$32", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-1/700/900" },
-  { id: "m2", name: "Terminal Hoodie", price: "$68", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-2/700/900" },
+  { id: "m1", name: "Bytecode Tee", price: "$32", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-1/1600/2133" },
+  { id: "m2", name: "Terminal Hoodie", price: "$68", category: "Apparel", image: "https://picsum.photos/seed/joel-merch-2/1600/2133" },
 ];
 
 export default function MerchPage() {
@@ -81,6 +81,7 @@ export default function MerchPage() {
                   src={item.image}
                   alt={`${item.name} (${item.category})`}
                   fill
+                  quality={90}
                   sizes="(min-width: 1024px) 320px, 50vw"
                   className="object-cover"
                 />

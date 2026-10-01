@@ -35,6 +35,7 @@ export function Hero() {
             src="/me24.jpg"
             alt="Portrait of Lukwago Joel"
             fill
+            quality={90}
             priority
             sizes="(min-width: 768px) 400px, 100vw"
             className="object-cover"
