@@ -29,7 +29,7 @@ function Value({ value }: { value: string | string[] }) {
         href={value}
         target="_blank"
         rel="noopener noreferrer"
-        className="underline decoration-black/30 underline-offset-4 transition-colors hover:decoration-black"
+        className="break-all underline decoration-black/30 underline-offset-4 transition-colors hover:decoration-black"
       >
         {value.replace(/^https?:\/\/(www\.)?/, "")}
       </a>
@@ -63,47 +63,65 @@ export default function AboutPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
       />
 
-      <main className="mx-auto max-w-5xl px-5 pb-24 pt-16 sm:pt-24">
-        <h1 className="text-5xl font-semibold tracking-tight text-black sm:text-6xl">
-          About
-        </h1>
-        <p className="mt-5 max-w-xl text-lg leading-relaxed text-black/60">
-          Engineering practical software systems, modern web platforms, and AI
-          tools that solve real-world problems.
-        </p>
+      <main className="mx-auto w-full max-w-5xl px-4 pb-20 pt-12 sm:px-5 sm:pb-24 sm:pt-16 lg:pt-24">
+        {/* Header */}
+        <header>
+          <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl lg:text-6xl">
+            About
+          </h1>
 
-        <div className="mt-12 lg:grid lg:grid-cols-[1fr_280px] lg:gap-16">
-          <aside className="mb-10 lg:order-2 lg:mb-0">
-            <div className="overflow-hidden rounded-3xl border border-black/10">
-              <div className="relative aspect-[4/5] w-full bg-black/5">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-black/60 sm:mt-5 sm:text-lg">
+            Engineering practical software systems, modern web platforms, and
+            AI tools that solve real-world problems.
+          </p>
+        </header>
+
+        {/* Main Layout */}
+        <div className="mt-10 flex flex-col gap-10 sm:mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16">
+          
+          {/* Profile Card */}
+          <aside className="order-first lg:order-last">
+            <div className="mx-auto w-full max-w-[340px] overflow-hidden rounded-3xl border border-black/[0.08] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] sm:max-w-[360px] lg:max-w-[280px]">
+              
+              {/* Image */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-black/5">
                 <Image
                   src="/me25.jpg"
                   alt="Portrait of Lukwago Joel"
                   fill
                   quality={90}
                   priority
-                  sizes="(min-width: 1024px) 280px, 100vw"
+                  sizes="(min-width: 1024px) 280px, (min-width: 640px) 360px, 100vw"
                   className="object-cover object-center"
                 />
               </div>
-              <div className="p-5">
-                <p className="text-[17px] font-semibold text-black">
+
+              {/* Profile Information */}
+              <div className="p-4 sm:p-5">
+                <p className="text-base font-semibold text-black sm:text-[17px]">
                   Lukwago Joel
                 </p>
-                <p className="text-sm text-black/50">
+
+                <p className="mt-0.5 text-sm text-black/50">
                   Software Engineer &amp; Entrepreneur
                 </p>
-                <dl className="mt-4 space-y-2 border-t border-black/10 pt-4 text-sm">
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-black/50">Based in</dt>
-                    <dd className="text-right text-black">Kampala, Uganda</dd>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-black/50">Focus</dt>
+
+                <dl className="mt-4 space-y-3 border-t border-black/10 pt-4 text-sm">
+                  <div className="flex items-start justify-between gap-4">
+                    <dt className="shrink-0 text-black/50">Based in</dt>
                     <dd className="text-right text-black">
+                      Kampala, Uganda
+                    </dd>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <dt className="shrink-0 text-black/50">Focus</dt>
+                    <dd className="max-w-[170px] text-right text-black">
                       Web &amp; mobile engineering
                     </dd>
                   </div>
@@ -112,46 +130,59 @@ export default function AboutPage() {
             </div>
           </aside>
 
-          <div className="lg:order-1">
-            <nav aria-label="On this page" className="flex flex-wrap gap-2">
+          {/* Content */}
+          <div className="min-w-0 lg:order-first">
+            {/* On This Page */}
+            <nav
+              aria-label="On this page"
+              className="flex flex-wrap gap-2"
+            >
               {ABOUT_DATA.map((block) => (
                 <a
                   key={block.section}
                   href={`#${block.section}`}
-                  className="inline-flex h-9 items-center rounded-full bg-black/5 px-4 text-sm font-medium text-black/70 transition-colors hover:bg-black/10"
+                  className="inline-flex min-h-9 items-center rounded-full bg-black/5 px-3.5 py-2 text-xs font-medium text-black/70 transition-colors hover:bg-black/10 sm:px-4 sm:text-sm"
                 >
                   {block.title}
                 </a>
               ))}
             </nav>
 
-            <div className="mt-6">
+            {/* Sections */}
+            <div className="mt-4 sm:mt-6">
               {ABOUT_DATA.map((block) => (
                 <section
                   key={block.section}
                   id={block.section}
-                  className="scroll-mt-20 border-b border-black/10 py-8 last:border-b-0"
+                  className="scroll-mt-20 border-b border-black/10 py-7 last:border-b-0 sm:py-8"
                 >
-                  <h2 className="text-2xl font-semibold tracking-tight text-black">
+                  <h2 className="text-xl font-semibold tracking-tight text-black sm:text-2xl">
                     {block.title}
                   </h2>
 
-                  <dl className="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-                    {block.items.map((item, i) => (
-                      <div
-                        key={i}
-                        className={
-                          typeof item.value === "string" && item.value.length > 60
-                            ? "sm:col-span-2"
-                            : ""
-                        }
-                      >
-                        <dt className="text-sm text-black/50">{item.label}</dt>
-                        <dd className="mt-1 text-[16px] leading-relaxed text-black">
-                          <Value value={item.value} />
-                        </dd>
-                      </div>
-                    ))}
+                  <dl className="mt-5 grid min-w-0 gap-x-8 gap-y-5 sm:grid-cols-2">
+                    {block.items.map((item, i) => {
+                      const isLong =
+                        typeof item.value === "string" &&
+                        item.value.length > 60;
+
+                      return (
+                        <div
+                          key={i}
+                          className={`min-w-0 ${
+                            isLong ? "sm:col-span-2" : ""
+                          }`}
+                        >
+                          <dt className="text-sm text-black/50">
+                            {item.label}
+                          </dt>
+
+                          <dd className="mt-1 break-words text-[15px] leading-relaxed text-black sm:text-[16px]">
+                            <Value value={item.value} />
+                          </dd>
+                        </div>
+                      );
+                    })}
                   </dl>
                 </section>
               ))}

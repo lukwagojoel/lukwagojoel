@@ -39,8 +39,8 @@ export const SIDEBAR_LINKS = [
   },
 ];
 export const SOCIAL_LINKS = [
-  { label: "LINKEDIN", href: "https://www.linkedin.com/in/lukwago-joel-933822221" },
-  { label: "GITHUB", href: "https://github.com/lukwagojoel" },
-  { label: "YOUTUBE", href: "https://youtube.com/@lukwago_joel" },
-  { label: "TIKTOK", href: "https://tiktok.com/@lukwago_joel" },
+  { label: "Linkedin", href: "https://www.linkedin.com/in/lukwago-joel-933822221" },
+  { label: "Github", href: "https://github.com/lukwagojoel" },
+  { label: "Youtube", href: "https://youtube.com/@lukwago_joel" },
+  { label: "Tiktok", href: "https://tiktok.com/@lukwago_joel" },
 ];

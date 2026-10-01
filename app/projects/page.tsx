@@ -23,13 +23,25 @@ export const metadata: Metadata = {
 
 async function loadProjects(): Promise<ProjectFromAPI[]> {
   const snapshot = await getDocs(collection(db, "projects"));
+
   return snapshot.docs
-    .map((projectDoc) => ({ ...projectDoc.data(), id: projectDoc.id }) as ProjectFromAPI)
+    .map(
+      (projectDoc) =>
+        ({
+          ...projectDoc.data(),
+          id: projectDoc.id,
+        }) as ProjectFromAPI
+    )
     .filter((project) => (project.visibility ?? "public") === "public")
-    .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
+    .sort(
+      (a, b) =>
+        (a.order ?? Number.MAX_SAFE_INTEGER) -
+        (b.order ?? Number.MAX_SAFE_INTEGER)
+    );
 }
 
-const hrefOf = (p: ProjectFromAPI): string | undefined => p.url ?? p.link ?? p.href;
+const hrefOf = (p: ProjectFromAPI): string | undefined =>
+  p.url ?? p.link ?? p.href;
 
 export default async function ProjectsPage() {
   const projects = await loadProjects();
@@ -61,73 +73,93 @@ export default async function ProjectsPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
       />
 
-      <main className="min-h-screen w-full bg-white px-5 pb-24 pt-16 text-black sm:pt-24">
+      <main className="min-h-screen w-full bg-white px-4 pb-20 pt-12 text-black sm:px-5 sm:pb-24 sm:pt-16 lg:pt-24">
         <div className="mx-auto max-w-5xl">
-        <h1 className="text-5xl font-semibold tracking-tight text-black sm:text-6xl">
-          Projects
-        </h1>
-        <p className="mt-5 max-w-xl text-lg leading-relaxed text-black/60">
-          Web and mobile products I&apos;ve built for clients and for myself.
-        </p>
+          {/* Header */}
+          <header>
+            <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl lg:text-6xl">
+              Projects
+            </h1>
 
-        <ul className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, i) => {
-            const href = hrefOf(project);
-            const summary = project.description;
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-black/60 sm:mt-5 sm:text-lg">
+              Web and mobile products I&apos;ve built for clients and for
+              myself.
+            </p>
+          </header>
 
-            const card = (
-              <>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-black/10 bg-white">
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={`${project.name} screenshot`}
-                      fill
-                      quality={90}
-                      sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-5xl font-semibold text-black/20">
-                      {project.name[0]}
-                    </div>
+          {/* Projects */}
+          <ul className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, i) => {
+              const href = hrefOf(project);
+              const summary = project.description;
+
+              const card = (
+                <>
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.025]">
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={`${project.name} screenshot`}
+                        fill
+                        quality={90}
+                        sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 100vw"
+                        className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.02] sm:p-3"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-5xl font-semibold text-black/20">
+                        {project.name[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Project Name */}
+                  <h2 className="mt-3 break-words text-[17px] font-medium text-black">
+                    {project.name}
+                  </h2>
+
+                  {/* Project Description */}
+                  {summary && (
+                    <p
+                      title={summary}
+                      className="mt-1 truncate text-sm leading-relaxed text-black/60"
+                    >
+                      {summary}
+                    </p>
                   )}
-                </div>
-                <h2 className="mt-3 break-words text-[17px] font-medium text-black">
-                  {project.name}
-                </h2>
-                {summary && (
-                  <p title={summary} className="mt-1 truncate text-sm leading-relaxed text-black/60">
-                    {summary}
-                  </p>
-                )}
-              </>
-            );
+                </>
+              );
 
-            return (
-              <li key={project.id ?? i} className="min-w-0">
-                {href ? (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block"
-                  >
-                    {card}
-                  </a>
-                ) : (
-                  <div className="group">{card}</div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        {projects.length === 0 && (
-          <p className="mt-12 text-black/60">No public projects are available right now.</p>
-        )}
+              return (
+                <li key={project.id ?? i} className="min-w-0">
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block"
+                    >
+                      {card}
+                    </a>
+                  ) : (
+                    <div className="group">{card}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Empty State */}
+          {projects.length === 0 && (
+            <p className="mt-12 text-black/60">
+              No public projects are available right now.
+            </p>
+          )}
         </div>
       </main>
     </>
