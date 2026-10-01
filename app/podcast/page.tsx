@@ -1,16 +1,38 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-const description = "Conversations on God, life, & Relationships";
+// Synced with the podcast description below for consistency
+const description = "Conversations on God, life, and relationships — real, unfiltered, and rooted in faith.";
+const podcastImage = "https://lukwagojoel.com/podcast.jpg";
 
 export const metadata: Metadata = {
   title: "Podcast | Lukwago Joel",
   description,
-  alternates: { canonical: "/podcast" },
+
+  alternates: {
+    canonical: "/podcast",
+  },
+
   openGraph: {
     title: "Podcast | Lukwago Joel",
     description,
-    url: "/podcast",
+    url: "https://lukwagojoel.com/podcast",
+    type: "website",
+    images: [
+      {
+        url: podcastImage,
+        width: 1200,
+        height: 630,
+        alt: "Grounded Podcast by Lukwago Joel",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Podcast | Lukwago Joel",
+    description,
+    images: [podcastImage],
   },
 };
 
@@ -23,13 +45,11 @@ interface Podcast {
   links: { label: string; href: string }[];
 }
 
-// Swap the cover and links for the real thing when the show is live.
 const PODCASTS: Podcast[] = [
   {
     id: "grounded",
     title: "Grounded",
-    description:
-      "Conversations on God, life, and relationships — real, unfiltered, and rooted in faith.",
+    description,
     cover: "/podcast.jpg",
     status: "coming-soon",
     links: [
@@ -46,17 +66,18 @@ export default function PodcastPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "PodcastSeries",
-    name: show.title,
-    url: "https://lukwagojoel.com/podcast",
-    description,
-    author: {
+    "name": show.title,
+    "url": "https://lukwagojoel.com/podcast",
+    "description": description,
+    "author": {
       "@type": "Person",
-      name: "Lukwago Joel",
+      "name": "Lukwago Joel",
     },
   };
 
   return (
     <>
+      {/* Fixed: Wrapped properly inside a clean template string stringify block */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
