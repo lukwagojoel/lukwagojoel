@@ -1,296 +1,137 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiArrowUpRight, FiCheck, FiSend } from "react-icons/fi";
-import { ScrambleText } from "../kprstyle/Effects/scrumble";
-import { ClippedButton } from "../kprstyle/clippedButton";
-import { SOCIAL_LINKS } from "../../data/Navigation";
+import { useState } from "react";
 
-interface ContactFormProps {
-  email: string;
-  phone: string;
-  formattedPhone: string;
-}
+const fieldClass =
+  "w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-[16px] text-black placeholder:text-black/35 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10";
 
-export const ContactForm = ({
-  email,
-  phone,
-  formattedPhone,
-}: ContactFormProps) => {
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [formState, setFormState] = useState({
+export function ContactForm() {
+  const [form, setForm] = useState({
     name: "",
     email: "",
-    subject: "PROJECT INQUIRY",
+    subject: "Project inquiry",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleCopy = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(label);
-    setTimeout(() => setCopiedField(null), 2000);
-  };
-
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(null);
+    setSubmitting(true);
+    setError(null);
 
     try {
-      const response = await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formState),
+        body: JSON.stringify(form),
       });
-      const result = await response.json();
-
-      if (!response.ok) {
+      const result = await res.json();
+      if (!res.ok) {
         throw new Error(result.error || "Unable to send your message right now.");
       }
-
-      setIsSubmitted(true);
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Unable to send your message right now.",
+      setSent(true);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to send your message right now."
       );
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
-  };
+  }
+
+  if (sent) {
+    return (
+      <div
+        role="status"
+        className="rounded-2xl border border-black/10 p-8 text-center"
+      >
+        <h2 className="text-2xl font-semibold tracking-tight text-black">
+          Message sent
+        </h2>
+        <p className="mx-auto mt-2 max-w-sm text-black/60">
+          Thanks, {form.name}. I'll reply within 24 hours.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setSent(false);
+            setForm({ name: "", email: "", subject: "Project inquiry", message: "" });
+          }}
+          className="mt-6 text-sm text-black underline underline-offset-4"
+        >
+          Send another message
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-12">
-      {/* Direct Info & Actions Column */}
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="lg:col-span-5 space-y-10"
+    <form onSubmit={onSubmit} className="space-y-5" noValidate={false}>
+      <div>
+        <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-black">
+          Name
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          autoComplete="name"
+          placeholder="Your name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          className={fieldClass}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-black">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          className={fieldClass}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-black">
+          Project details
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows={5}
+          placeholder="Goals, timeline and scope"
+          value={form.message}
+          onChange={(e) => setForm({ ...form, message: e.target.value })}
+          className={`${fieldClass} resize-none`}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="flex h-12 w-full items-center justify-center rounded-full bg-black text-[15px] font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-50"
       >
-        <div className="space-y-6">
-          <h2 className="text-gray-400 text-xs tracking-widest uppercase font-bold">
-            ■ DIRECT CHANNELS
-          </h2>
+        {submitting ? "Sending…" : "Send message"}
+      </button>
 
-          {/* Email Card (Entire card is clickable to copy) */}
-          <div
-            onClick={() => handleCopy(email, "email")}
-            className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 cursor-pointer transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 uppercase">
-                PRIMARY EMAIL
-              </span>
-              {copiedField === "email" && (
-                <span className="text-[10px] text-fuchsia-400 font-bold tracking-wider flex items-center gap-1 uppercase">
-                  <FiCheck /> COPIED TO CLIPBOARD
-                </span>
-              )}
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-sm sm:text-base font-bold text-white group-hover:text-fuchsia-400 transition-colors tracking-wide">
-                {email}
-              </span>
-            </div>
-          </div>
-
-          {/* Phone Card (Entire card is clickable to copy) */}
-          <div
-            onClick={() => handleCopy(phone, "phone")}
-            className="p-6 bg-zinc-950 border border-white/10 space-y-3 relative group hover:border-fuchsia-400/50 cursor-pointer transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 uppercase">
-                PHONE / WHATSAPP
-              </span>
-              {copiedField === "phone" && (
-                <span className="text-[10px] text-fuchsia-400 font-bold tracking-wider flex items-center gap-1 uppercase">
-                  <FiCheck /> COPIED TO CLIPBOARD
-                </span>
-              )}
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-sm sm:text-base font-bold text-white group-hover:text-fuchsia-400 transition-colors tracking-wide">
-                {formattedPhone}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Social Links Section */}
-        <div className="space-y-4">
-          <h2 className="text-gray-400 text-xs tracking-widest uppercase font-bold">
-            ■ CONNECT & FOLLOW
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noreferrer"
-                className="p-4 bg-zinc-950 border border-white/10 hover:border-fuchsia-400/50 transition-colors group flex items-center justify-between text-xs font-bold text-white tracking-wider"
-              >
-                <ScrambleText text={s.label} />
-                <FiArrowUpRight className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-fuchsia-400 transition-all text-gray-500" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Availability Badge */}
-        <div className="p-6 border border-fuchsia-400/20 bg-fuchsia-400/5 space-y-2">
-          <div className="flex items-center gap-2 text-fuchsia-400 text-xs font-bold tracking-wider">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
-            </span>
-            LOCATION & TIME
-          </div>
-          <p className="text-xs text-gray-300">KAMPALA, UGANDA (UTC +3)</p>
-          <p className="text-xs text-gray-500">
-            CURRENT AVAILABILITY: ACCEPTING NEW PROJECTS AND FULL-STACK ENGAGEMENTS.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Interactive Form Column */}
-      <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="lg:col-span-7 bg-zinc-950 border border-white/10 p-6 sm:p-10 relative"
-      >
-        <AnimatePresence mode="wait">
-          {!isSubmitted ? (
-            <motion.form
-              key="form"
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -20 }}
-              onSubmit={handleSubmit}
-              className="space-y-8"
-            >
-              <div className="border-b border-white/10 pb-4 flex items-center justify-between">
-                <span className="text-xs text-fuchsia-400 font-bold uppercase tracking-widest">
-                  // TRANSMIT MESSAGE
-                </span>
-                <span className="text-xs text-gray-600">SECURE END-TO-END</span>
-              </div>
-
-              <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
-                  01. YOUR NAME *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="JOHN DOE"
-                  value={formState.name}
-                  onChange={(e) =>
-                    setFormState({ ...formState, name: e.target.value })
-                  }
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
-                />
-              </div>
-
-              <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
-                  02. YOUR EMAIL *
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="JOHN@EXAMPLE.COM"
-                  value={formState.email}
-                  onChange={(e) =>
-                    setFormState({ ...formState, email: e.target.value })
-                  }
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors"
-                />
-              </div>
-
-              <div className="space-y-2 group">
-                <label className="text-xs font-bold tracking-widest text-gray-400 group-focus-within:text-fuchsia-400 transition-colors uppercase">
-                  03. PROJECT DETAILS *
-                </label>
-                <textarea
-                  required
-                  rows={5}
-                  placeholder="TELL ME ABOUT YOUR PROJECT GOALS, TIMELINE, AND SCOPE..."
-                  value={formState.message}
-                  onChange={(e) =>
-                    setFormState({ ...formState, message: e.target.value })
-                  }
-                  className="w-full bg-black border border-white/20 p-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-400 transition-colors resize-none"
-                />
-              </div>
-
-              <div className="pt-2">
-                <ClippedButton
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <span className="animate-pulse flex items-center gap-2">
-                      TRANSMITTING...
-                    </span>
-                  ) : (
-                    <>
-                      SEND MESSAGE <FiSend />
-                    </>
-                  )}
-                </ClippedButton>
-              </div>
-              {submitError && (
-                <p role="alert" className="text-sm text-red-400">
-                  {submitError}
-                </p>
-              )}
-            </motion.form>
-          ) : (
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="py-16 text-center space-y-6"
-            >
-              <div className="inline-flex p-4 border border-fuchsia-400 rounded-full bg-fuchsia-400/10 text-fuchsia-400">
-                <FiCheck className="text-3xl" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold uppercase tracking-tight text-white">
-                  TRANSMISSION RECEIVED.
-                </h3>
-                <p className="text-sm text-gray-400 max-w-md mx-auto">
-                  Thank you for reaching out, {formState.name}. Your message has been logged, and I will respond within 24 hours.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSubmitted(false);
-                  setFormState({
-                    name: "",
-                    email: "",
-                    subject: "PROJECT INQUIRY",
-                    message: "",
-                  });
-                }}
-                className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-fuchsia-400 hover:text-white transition-colors uppercase pt-4"
-              >
-                SEND ANOTHER MESSAGE <FiArrowUpRight />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </div>
+      {error && (
+        <p role="alert" className="text-sm text-red-600">
+          {error}
+        </p>
+      )}
+    </form>
   );
-};
+}

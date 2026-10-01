@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import {  Inter,Quicksand, Montserrat } from "next/font/google";
 import "./globals.css";
 import {personJsonLd} from "../components/identity";
-import { Header } from "@/components/kprstyle/Header";
-import { Footer } from "@/components/kprstyle/Footer";
-import { SmoothScroll } from "@/components/kprstyle/Effects/smoothScroll";
+import { Header } from "@/components/navigation/Header";
+import { Footer } from "@/components/Footer";
 
 
 
@@ -124,7 +123,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${inter.variable}`}>
       <body className="font-body bg-carbon text-bone antialiased">
-        <SmoothScroll>
+        
         <script
   type="application/ld+json"
   dangerouslySetInnerHTML={{
@@ -135,7 +134,7 @@ export default function RootLayout({
         <Header/>
         {children}
         <Footer/>
-        </SmoothScroll>
+        
       </body>
     </html>
   );
