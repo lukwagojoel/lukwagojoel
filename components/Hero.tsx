@@ -70,7 +70,7 @@ export function Hero() {
                 quality={95}
                 priority
                 sizes="320px"
-                className="object-cover object-center"
+                className="object-cover object-center grayscale"
               />
             </div>
           </div>
