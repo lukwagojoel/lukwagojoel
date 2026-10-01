@@ -9,7 +9,7 @@ export const ABOUT_DATA = [
       },
       {
         label: "Also known as",
-        value: ["Lukwago Joel", "Joel Lukwago","Lukwago Joel Jr"],
+        value: ["Lukwago Joel", "Joel Lukwago","Lukwago Joel Jr", "Junior", "Lukwago Junior"],
       },
       {
         label: "Occupation",
