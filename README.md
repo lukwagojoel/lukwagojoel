@@ -10,7 +10,7 @@
 
 <br/>
 
-I'm a **Software Engineer**, **Entrepreneur**, and **Fashion Stylist** based in Kampala, Uganda. I specialize in building scalable web applications, mobile platforms, and integrating AI workflows to create real-world business value.
+I'm a **Software Engineer**, **Entrepreneur**, based in Kampala, Uganda. I specialize in building scalable web applications, mobile platforms, and integrating AI workflows to create real-world business value.
 
 <br/>
 
