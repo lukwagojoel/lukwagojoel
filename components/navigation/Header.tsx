@@ -50,7 +50,7 @@ export function Header() {
 
           <Link
             href="/contact"
-            className={`${Plus_Jakarta.className} hidden h-8 items-center rounded-full bg-black px-4 text-lg leading-none text-white transition-opacity hover:opacity-80 md:inline-flex`}
+            className={`${Plus_Jakarta.className} hidden h-8 items-center rounded-full bg-black px-4 text-sm leading-none text-white transition-opacity hover:opacity-80 md:inline-flex border border-black/10`}
           >
             Contact
           </Link>

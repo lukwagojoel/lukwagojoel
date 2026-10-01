@@ -14,10 +14,7 @@ export function Footer() {
               Lukwago Joel
             </p>
             <p className="mt-3 text-sm text-black/60">Kampala, Uganda</p>
-            <p className="mt-4 inline-flex items-center gap-2 text-sm text-black">
-              <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
-              Available for work
-            </p>
+           
           </div>
 
           <nav aria-label="Footer">
