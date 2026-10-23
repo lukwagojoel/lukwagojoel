@@ -155,36 +155,38 @@ export default async function ProjectPage({ params }: Props) {
             <span className="text-black/80">{project.name}</span>
           </nav>
 
-          {/* Header */}
-          <header className="mt-8">
-            <div className="flex items-center gap-3.5">
-              <ProjectLogo
-                name={project.name}
-                logo={project.logo}
-                className="h-12 w-12"
-              />
+          {/* Header: text on the left, big logo on the far right */}
+          <header className="mt-8 flex items-start justify-between gap-5 sm:gap-8">
+            <div className="min-w-0 flex-1">
               <p className="text-sm font-medium uppercase tracking-wider text-black/50">
                 {categoryLabel[project.category]}
               </p>
+
+              <h1 className="mt-3 break-words text-3xl font-semibold tracking-tight sm:text-5xl">
+                {project.name}
+              </h1>
+
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-black/60 sm:text-lg">
+                {project.tagline}
+              </p>
+
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80"
+                >
+                  Visit {hostOf(project.url)} ↗
+                </a>
+              )}
             </div>
 
-            <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-              {project.name}
-            </h1>
-            <p className="mt-3 max-w-2xl text-base leading-relaxed text-black/60 sm:text-lg">
-              {project.tagline}
-            </p>
-
-            {project.url && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80"
-              >
-                Visit {hostOf(project.url)} ↗
-              </a>
-            )}
+            <ProjectLogo
+              size="detail"
+              name={project.name}
+              logo={project.logo}
+            />
           </header>
 
           {/* Overview + facts */}

@@ -77,6 +77,7 @@ export default function ProjectsPage() {
                 >
                   <div className="flex items-start justify-between">
                     <ProjectLogo
+                      size="card"
                       name={project.name}
                       logo={project.logo}
                       className="h-14 w-14"

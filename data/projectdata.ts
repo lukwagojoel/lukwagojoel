@@ -102,7 +102,7 @@ export const projects: Project[] = [
     id: "imani-vet-solutions",
     slug: "imani-vet-solutions",
     name: "Imani Veterinary Solutions",
-    logo: "/projects/imani.png",
+    logo: "/projects/imani.jpg",
     // images: [],
     tagline: "Vet care and agribusiness marketplace",
     description:
@@ -217,7 +217,7 @@ export const projects: Project[] = [
     id: "carezza-international-school",
     slug: "carezza-international-school",
     name: "Carezza International School",
-    logo: "/projects/carezza.png",
+    logo: "/projects/carezza.jpg",
     tagline: "Early-childhood school website",
     description:
       "Official website of a Christian early-childhood school, presenting its programmes, mission, facilities and contacts.",
@@ -252,7 +252,7 @@ export const projects: Project[] = [
   {
     id: "varam-sickle-cell-foundation",
     slug: "varam-sickle-cell-foundation",
-    logo: "/projects/varam.png",
+    logo: "/projects/varam.jpg",
     name: "Varam Sickle Cell Foundation",
     tagline: "Hope & healthcare for sickle cell patients",
     description:
@@ -287,7 +287,7 @@ export const projects: Project[] = [
   {
     id: "dorta-textiles",
     slug: "dorta-textiles",
-    logo: "/projects/dorta.png",
+    logo: "/projects/dorta.jpg",
     name: "Dorta Textiles",
     tagline: "Textiles company website",
     description:
