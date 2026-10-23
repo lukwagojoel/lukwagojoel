@@ -271,6 +271,7 @@ export const projects: Project[] = [
     id: "parpac-africa",
     slug: "parpac-africa",
     name: "PARPAC Africa",
+    logo: "/projects/parpaca.jpg",
     tagline: "Organisation website with custom CMS",
     description:
       "Organisation website presenting its work, mission and contact information. Built a custom CMS for managing content, with Firebase Auth for authentication and Firestore for data.",
