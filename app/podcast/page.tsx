@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: podcastImage,
         width: 1200,
         height: 630,
-        alt: "Grounded Podcast by Lukwago Joel",
+        alt: "Toptierme Podcast by Lukwago Joel",
       },
     ],
   },
@@ -48,7 +48,7 @@ interface Podcast {
 const PODCASTS: Podcast[] = [
   {
     id: "grounded",
-    title: "Grounded",
+    title: "Top-tier me",
     description,
     cover: "/podcast.jpg",
     status: "coming-soon",

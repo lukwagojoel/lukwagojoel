@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { collection, getDocs } from "firebase/firestore";
-import { type ProjectFromAPI } from "@/data/projects";
+import Link from "next/link";
+import {
+  getPublicProjects,
+  categoryLabel,
+  platformLabel,
+} from "@/data/projectdata";
+import { ProjectLogo } from "@/components/project-logo";
 import { jobTitle } from "@/data/meta";
-import { db } from "@/lib/firebase";
 
-export const revalidate = 3600;
+const SITE = "https://lukwagojoel.com";
 
 const description =
   "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.";
@@ -21,50 +24,24 @@ export const metadata: Metadata = {
   },
 };
 
-async function loadProjects(): Promise<ProjectFromAPI[]> {
-  const snapshot = await getDocs(collection(db, "projects"));
-
-  return snapshot.docs
-    .map(
-      (projectDoc) =>
-        ({
-          ...projectDoc.data(),
-          id: projectDoc.id,
-        }) as ProjectFromAPI
-    )
-    .filter((project) => (project.visibility ?? "public") === "public")
-    .sort(
-      (a, b) =>
-        (a.order ?? Number.MAX_SAFE_INTEGER) -
-        (b.order ?? Number.MAX_SAFE_INTEGER)
-    );
-}
-
-const hrefOf = (p: ProjectFromAPI): string | undefined =>
-  p.url ?? p.link ?? p.href;
-
-export default async function ProjectsPage() {
-  const projects = await loadProjects();
+export default function ProjectsPage() {
+  const projects = getPublicProjects();
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Lukwago Joel Software Projects",
-    url: "https://lukwagojoel.com/projects",
+    url: `${SITE}/projects`,
     description:
       "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
-    author: {
-      "@type": "Person",
-      name: "Lukwago Joel",
-      jobTitle,
-    },
+    author: { "@type": "Person", name: "Lukwago Joel", jobTitle },
     mainEntity: {
       "@type": "ItemList",
       itemListElement: projects.map((p, i) => ({
         "@type": "ListItem",
         position: i + 1,
         name: p.name,
-        ...(hrefOf(p)?.startsWith("http") ? { url: hrefOf(p) } : {}),
+        url: `${SITE}/projects/${p.slug}`,
       })),
     },
   };
@@ -73,19 +50,16 @@ export default async function ProjectsPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <main className="min-h-screen w-full bg-white px-4 pb-20 pt-12 text-black sm:px-5 sm:pb-24 sm:pt-16 lg:pt-24">
         <div className="mx-auto max-w-5xl">
           {/* Header */}
           <header>
-            <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
               Projects
             </h1>
-
             <p className="mt-4 max-w-xl text-base leading-relaxed text-black/60 sm:mt-5 sm:text-lg">
               Web and mobile products I&apos;ve built for clients and for
               myself.
@@ -93,65 +67,52 @@ export default async function ProjectsPage() {
           </header>
 
           {/* Projects */}
-          <ul className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project, i) => {
-              const href = hrefOf(project);
-              const summary = project.description;
-
-              const card = (
-                <>
-                  {/* Image */}
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.025]">
-                    {project.image ? (
-                      <Image
-                        src={project.image}
-                        alt={`${project.name} screenshot`}
-                        fill
-                        quality={90}
-                        sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 100vw"
-                        className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.02] sm:p-3"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-5xl font-semibold text-black/20">
-                        {project.name[0]}
-                      </div>
-                    )}
+          <ul className="mt-10 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => (
+              <li key={project.id} className="min-w-0">
+                <Link
+                  href={`/projects/${project.slug}`}
+                  aria-label={`View ${project.name} project details`}
+                  className="group flex h-full flex-col rounded-2xl border border-black/[0.08] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-black/25 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+                >
+                  <div className="flex items-start justify-between">
+                    <ProjectLogo
+                      name={project.name}
+                      logo={project.logo}
+                      className="h-14 w-14"
+                    />
+                    <span
+                      aria-hidden
+                      className="text-lg text-black/25 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-black"
+                    >
+                      ↗
+                    </span>
                   </div>
 
-                  {/* Project Name */}
-                  <h2 className="mt-3 break-words text-[17px] font-medium text-black">
+                  <h2 className="mt-4 break-words text-[17px] font-medium leading-snug">
                     {project.name}
                   </h2>
 
-                  {/* Project Description */}
-                  {summary && (
-                    <p
-                      title={summary}
-                      className="mt-1 truncate text-sm leading-relaxed text-black/60"
-                    >
-                      {summary}
-                    </p>
-                  )}
-                </>
-              );
+                  <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-black/60">
+                    {project.tagline}
+                  </p>
 
-              return (
-                <li key={project.id ?? i} className="min-w-0">
-                  {href ? (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group block"
-                    >
-                      {card}
-                    </a>
-                  ) : (
-                    <div className="group">{card}</div>
-                  )}
-                </li>
-              );
-            })}
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                    <span className="rounded-full bg-black px-2.5 py-1 text-[11px] font-medium text-white">
+                      {categoryLabel[project.category]}
+                    </span>
+                    {project.platforms.slice(0, 3).map((pl) => (
+                      <span
+                        key={pl}
+                        className="rounded-full border border-black/10 px-2.5 py-1 text-[11px] font-medium text-black/60"
+                      >
+                        {platformLabel[pl]}
+                      </span>
+                    ))}
+                  </div>
+                </Link>
+              </li>
+            ))}
           </ul>
 
           {/* Empty State */}
