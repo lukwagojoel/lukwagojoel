@@ -10,48 +10,149 @@ import { jobTitle } from "@/data/meta";
 
 const SITE = "https://lukwagojoel.com";
 
+/**
+ * Social share image. The Pexels params crop it to the 1200x630 size
+ * that WhatsApp, LinkedIn, Facebook and X expect.
+ * For best reliability, download it into /public/og/projects.jpg and
+ * use "/og/projects.jpg" here instead.
+ */
+const SOCIAL_IMAGE =
+  "https://images.pexels.com/photos/18833779/pexels-photo-18833779.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1200&h=630";
+
+const SOCIAL_IMAGE_ALT = "Software projects by Lukwago Joel";
+
+const title = "Projects | Lukwago Joel";
+
 const description =
   "Explore selected full-stack web applications, custom software engineering solutions, UI/UX systems, and open-source software built by Lukwago Joel.";
 
+const socialTitle = "Projects by Lukwago Joel: Web & Mobile Apps";
+
+const socialDescription =
+  "Mobile apps on Google Play, web platforms and websites built with React, React Native, Next.js and Node.js by Lukwago Joel, software engineer in Kampala, Uganda.";
+
 export const metadata: Metadata = {
-  title: "Projects | Lukwago Joel",
+  title,
   description,
+  applicationName: "Lukwago Joel",
+  keywords: [
+    "Lukwago Joel",
+    "Lukwago Joel projects",
+    "software engineer Uganda",
+    "software developer Kampala",
+    "React Native developer",
+    "Next.js developer",
+    "React developer Uganda",
+    "mobile app developer Uganda",
+    "full-stack developer",
+    "web developer Kampala",
+    "Microsolvant",
+    "Imani Veterinary Solutions",
+    "Muzugu",
+    "Holy Battlefront",
+    "portfolio",
+  ],
+  authors: [{ name: "Lukwago Joel", url: SITE }],
+  creator: "Lukwago Joel",
+  publisher: "Lukwago Joel",
+  category: "technology",
   alternates: { canonical: "/projects" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Projects | Lukwago Joel",
-    description,
+    type: "website",
     url: "/projects",
+    siteName: "Lukwago Joel",
+    locale: "en_UG",
+    title: socialTitle,
+    description: socialDescription,
+    images: [
+      {
+        url: SOCIAL_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: SOCIAL_IMAGE_ALT,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: socialTitle,
+    description: socialDescription,
+    images: [{ url: SOCIAL_IMAGE, alt: SOCIAL_IMAGE_ALT }],
   },
 };
 
 export default function ProjectsPage() {
   const projects = getPublicProjects();
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Lukwago Joel Software Projects",
-    url: `${SITE}/projects`,
-    description:
-      "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
-    author: { "@type": "Person", name: "Lukwago Joel", jobTitle },
-    mainEntity: {
-      "@type": "ItemList",
-      itemListElement: projects.map((p, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: p.name,
-        url: `${SITE}/projects/${p.slug}`,
-      })),
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${SITE}/projects#page`,
+      name: "Lukwago Joel Software Projects",
+      url: `${SITE}/projects`,
+      description:
+        "A showcase of web applications, mobile platforms, and software engineering projects created by Lukwago Joel.",
+      inLanguage: "en",
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: SOCIAL_IMAGE,
+        width: 1200,
+        height: 630,
+      },
+      isPartOf: { "@type": "WebSite", name: "Lukwago Joel", url: SITE },
+      author: {
+        "@type": "Person",
+        name: "Lukwago Joel",
+        url: SITE,
+        jobTitle,
+      },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: projects.length,
+        itemListElement: projects.map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: p.name,
+          url: `${SITE}/projects/${p.slug}`,
+        })),
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Projects",
+          item: `${SITE}/projects`,
+        },
+      ],
+    },
+  ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {jsonLd.map((data, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        />
+      ))}
 
       <main className="min-h-screen w-full bg-white px-4 pb-20 pt-12 text-black sm:px-5 sm:pb-24 sm:pt-16 lg:pt-24">
         <div className="mx-auto max-w-5xl">
@@ -80,7 +181,6 @@ export default function ProjectsPage() {
                       size="card"
                       name={project.name}
                       logo={project.logo}
-                      className="h-14 w-14"
                     />
                     <span
                       aria-hidden
