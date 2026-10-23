@@ -16,6 +16,13 @@ import { jobTitle } from "@/data/meta";
 
 const SITE = "https://lukwagojoel.com";
 
+/** Store badge images. Change these paths if you saved them elsewhere in /public */
+const BADGES = {
+  playStore: "/assets/playstore.png",
+  appStore: "/assets/apple.png",
+  appStoreSoon: "/assets/apple.jpg",
+};
+
 type Props = { params: Promise<{ slug: string }> };
 
 // Only slugs from the array exist; anything else is a 404
@@ -127,12 +134,39 @@ function buildJsonLd(project: Project) {
   return [main, breadcrumbs];
 }
 
+/** A single store badge image (height fixed, width follows the image) */
+function Badge({ src, alt }: { src: string; alt: string }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={0}
+      height={0}
+      sizes="180px"
+      quality={100}
+      className="h-12 w-auto sm:h-14"
+    />
+  );
+}
+
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   const { prev, next } = getAdjacentProjects(project.slug);
+
+  // Split store links (shown as badges) from everything else
+  const playLink = project.links.find((l) => l.kind === "play-store");
+  const appleLink = project.links.find((l) => l.kind === "app-store");
+  const otherLinks = project.links.filter(
+    (l) => l.kind !== "play-store" && l.kind !== "app-store"
+  );
+
+  const isApp = project.category === "mobile-app";
+  // Mobile apps without an iOS link show the "coming soon" badge
+  const showAppleSoon = isApp && !appleLink;
+  const hasBadges = Boolean(playLink || appleLink || showAppleSoon);
 
   return (
     <>
@@ -231,6 +265,55 @@ export default async function ProjectPage({ params }: Props) {
             </aside>
           </div>
 
+          {/* Get the app (store badges) */}
+          {hasBadges && (
+            <section aria-labelledby="get-app" className="mt-12">
+              <h2 id="get-app" className="text-xl font-semibold">
+                Get the app
+              </h2>
+              <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4">
+                {playLink && (
+                  <a
+                    href={playLink.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Get ${project.name} on Google Play`}
+                    className="transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    <Badge
+                      src={BADGES.playStore}
+                      alt={`Get ${project.name} on Google Play`}
+                    />
+                  </a>
+                )}
+
+                {appleLink && (
+                  <a
+                    href={appleLink.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Download ${project.name} on the App Store`}
+                    className="transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    <Badge
+                      src={BADGES.appStore}
+                      alt={`Download ${project.name} on the App Store`}
+                    />
+                  </a>
+                )}
+
+                {showAppleSoon && (
+                  <span title="iOS version coming soon">
+                    <Badge
+                      src={BADGES.appStoreSoon}
+                      alt={`${project.name} for iOS is coming soon to the App Store`}
+                    />
+                  </span>
+                )}
+              </div>
+            </section>
+          )}
+
           {/* Screenshots (compact, scrollable) */}
           {project.images && project.images.length > 0 && (
             <section aria-labelledby="screens" className="mt-12">
@@ -255,14 +338,14 @@ export default async function ProjectPage({ params }: Props) {
             </section>
           )}
 
-          {/* Links */}
-          {project.links.length > 0 && (
+          {/* Other links (website, web dashboard, source code) */}
+          {otherLinks.length > 0 && (
             <section aria-labelledby="links" className="mt-12">
               <h2 id="links" className="text-xl font-semibold">
                 Find it online
               </h2>
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                {project.links.map((link) => (
+                {otherLinks.map((link) => (
                   <li key={link.url}>
                     <a
                       href={link.url}
