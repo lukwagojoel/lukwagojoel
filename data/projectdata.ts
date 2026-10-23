@@ -78,7 +78,7 @@ export const projects: Project[] = [
     id: "microsolvant",
     slug: "microsolvant",
     name: "Microsolvant",
-    logo: "/projects/microsolvant.webp",
+    logo: "/projects/microsolvant.png",
     // images: ["/projects/microsolvant/dashboard.webp", "/projects/microsolvant/mobile-1.webp"],
     tagline: "Loan management platform for lenders",
     description:
